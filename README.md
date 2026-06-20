@@ -2,6 +2,88 @@
 
 Seven Claude Skills that harvest your writing voice from text you actually wrote, then draft, rewrite, and refine prose in that voice.
 
+## Requirements
+
+These skills run inside **Claude Code** — Anthropic's AI coding assistant. Claude Code is available as:
+
+- **Desktop app** — [claude.ai/download](https://claude.ai/download) (Mac and Windows; easiest starting point)
+- **CLI** — `npm install -g @anthropic-ai/claude-code` (requires Node.js 18+)
+- **IDE extension** — search "Claude" in VS Code or JetBrains Marketplace
+
+You need an Anthropic account and an active Claude subscription (Pro or above). All three surfaces share the same skill installation directory, so instructions below apply to all of them.
+
+> **claude.ai web** — the browser version of Claude does not support user-level skills. These skills will not be available there.
+
+## Installation
+
+**1. Download the skills.**
+
+If you have git:
+```bash
+git clone https://github.com/jacquardlabs/voice-suite.git
+```
+
+Otherwise: click **Code → Download ZIP** on this page, then unzip it.
+
+**2. Create your skills directory** (skip if it already exists).
+
+Mac / Linux:
+```bash
+mkdir -p ~/.claude/skills
+```
+
+Windows (run in Command Prompt):
+```bat
+mkdir "%USERPROFILE%\.claude\skills"
+```
+
+**3. Copy the skills in.**
+
+Mac / Linux:
+```bash
+cp -r voice-suite/skills/* ~/.claude/skills/
+```
+
+Windows:
+```bat
+xcopy /E /I voice-suite\skills\* "%USERPROFILE%\.claude\skills\"
+```
+
+That's it. All 7 skills are immediately available — no restart required.
+
+## First run
+
+Run these in order the first time. After that, use whichever generation skill you need.
+
+**Step 1 — Build your voice profile.**
+
+Open Claude Code (desktop, CLI, or IDE) and type:
+```
+/voice-harvest
+```
+The skill will ask which sources to read (your Claude chat history is always available; Gmail, Slack, and Notion require those connectors to be enabled). It filters out AI-generated text and other people's writing, shows you the extracted exemplars for approval, then writes your profile. Takes 5–15 minutes depending on how much source material is available.
+
+You only need to do this once. Run it again later with "refresh my profile" to incorporate new writing.
+
+**Step 2 — Use a generation skill.**
+
+| What you want to do | Type |
+|---|---|
+| Write a doc, memo, proposal, blog post | `/voice-doc` |
+| Draft or reply to an email | `/voice-email` |
+| Write a Slack message, DM, or text | `/voice-chat` |
+| Rewrite AI-generated text in your voice | `/voice-rewrite` |
+
+Describe what you need after invoking the skill, or paste the content you want rewritten. The skill reads your profile and drafts in your voice.
+
+**Step 3 — Tune from your edits.**
+
+When you revise a draft before using it, paste both versions into Claude and type:
+```
+/voice-tune
+```
+It extracts what changed (voice patterns only, not content), asks whether to make each change a standing rule, and patches your profile. Over time this sharpens the drafts.
+
 ## Pipeline
 
 ```
