@@ -1,119 +1,97 @@
 # Voice Suite
 
-Seven Claude Skills that harvest your writing voice from text you actually wrote, then draft, rewrite, and refine prose in that voice.
+Seven Claude Skills that mine text you actually wrote, distill it into a voice profile, and generate new prose in that voice — docs, emails, chat messages, rewrites.
 
-## Installation
+## What's here
 
-These skills work on two different Claude surfaces, each with its own install method.
+- **voice-harvest** — the miner. Reads your Claude chats, Gmail, Slack, or Notion (consent-per-source, read-only), filters for owner-only authorship, strips LLM-generated content via a two-pass baseline (pre-2023 gold standard → score everything else against it), and writes the profile.
+- **voice-profile** — the data layer. Global cross-register traits plus per-register files (longform, email, chat) — each with quantified traits, verbatim exemplars, anti-patterns, a Strunk-exemption list (longform only), and coverage metadata. Read by the generators; written by harvest and tune.
+- **voice-doc / voice-email / voice-chat / voice-rewrite** — the generators. Draft new long-form docs, email, short-form messages, or rewrite existing text in your voice. Draft-only — none send or publish.
+- **voice-tune** — the feedback loop. Diffs your edits against generated drafts, extracts voice deltas (not content changes), requires a repeated pattern before patching, and confirms every profile change before writing it.
 
----
+## Install
 
-### Option A — Claude (chat interface)
+### Claude (web or Desktop app)
 
-This covers the **Claude.ai website** and the **Claude Desktop app** (downloaded from [claude.ai/download](https://claude.ai/download)). You need a Claude account with a Pro or Max subscription.
+Skills upload as ZIPs — one per skill, 7 total. You need a Claude account (Pro or Max).
 
-Skills are uploaded as ZIP files, one per skill.
+**1. Download the repo.** Click **Code → Download ZIP** on this page and unzip it.
 
-**1. Download this repo.**
+**2. Compress each skill folder.** Open `voice-suite/skills/`. Right-click each subfolder → Compress (Mac) or Send to → Compressed (zipped) folder (Windows). Seven folders, seven ZIPs.
 
-Click **Code → Download ZIP** on this page and unzip it. You'll have a `voice-suite` folder.
+**3. Upload each ZIP.** In Claude: account menu → **Customize** → **Skills** → **+** → **Upload a skill**.
 
-**2. Zip each skill folder.**
-
-Open the `voice-suite/skills/` folder. You'll see 7 subfolders. Compress each one individually:
-
-- **Mac:** right-click the folder → Compress
-- **Windows:** right-click the folder → Send to → Compressed (zipped) folder
-
-You should end up with 7 ZIP files: `voice-harvest.zip`, `voice-profile.zip`, `voice-doc.zip`, `voice-email.zip`, `voice-chat.zip`, `voice-rewrite.zip`, `voice-tune.zip`.
-
-**3. Upload each ZIP.**
-
-In Claude (web or Desktop): click your account name → **Customize** → **Skills** → **+** → **Upload a skill**. Upload each ZIP in turn.
-
-That's it. Skills activate automatically when Claude recognizes a matching request — or type `/skill-name` to invoke one directly.
+Skills auto-trigger on matching requests — or invoke directly with `/skill-name`.
 
 ---
 
-### Option B — Claude Code
+### Claude Code (CLI, Desktop, VS Code, JetBrains)
 
-This covers the **Claude Code CLI**, the **Claude Code Desktop app**, and the **VS Code / JetBrains extensions**. All four share the same install directory. You need a Claude account with a Pro or Max subscription (or API access).
+All four surfaces share `~/.claude/skills/`. You need a Claude account (Pro or Max, or API access).
 
-**1. Download this repo.**
+**1. Download the repo.**
 
-If you have git:
 ```bash
 git clone https://github.com/jacquardlabs/voice-suite.git
 ```
-Otherwise: click **Code → Download ZIP** on this page and unzip it.
 
-**2. Create your skills directory** (skip if it already exists).
+Or: **Code → Download ZIP** → unzip.
 
-Mac / Linux:
+**2. Create the skills directory** (skip if it exists).
+
 ```bash
-mkdir -p ~/.claude/skills
-```
-Windows (Command Prompt):
-```bat
-mkdir "%USERPROFILE%\.claude\skills"
+mkdir -p ~/.claude/skills                              # Mac / Linux
+mkdir "%USERPROFILE%\.claude\skills"                   # Windows
 ```
 
-**3. Copy the skills in.**
+**3. Copy in.**
 
-Mac / Linux:
 ```bash
-cp -r voice-suite/skills/* ~/.claude/skills/
-```
-Windows:
-```bat
-xcopy /E /I voice-suite\skills\* "%USERPROFILE%\.claude\skills\"
+cp -r voice-suite/skills/* ~/.claude/skills/                        # Mac / Linux
+xcopy /E /I voice-suite\skills\* "%USERPROFILE%\.claude\skills\"    # Windows
 ```
 
-All 7 skills are immediately available — no restart required. Type `/skill-name` to invoke any of them.
+Immediately available. No restart.
 
 ---
 
 ## First run
 
-Run these in order the first time. After that, use whichever generation skill you need.
+**1. Harvest.** Type `/voice-harvest` — or say "learn my writing voice."
 
-**Step 1 — Build your voice profile.**
+The skill asks which sources to read, mines only your own text, filters AI-generated content, shows you the extracted samples for approval, and writes the profile. Takes 5–15 min. Run once; re-run anytime to pull in new writing.
 
-Type `/voice-harvest` (or just say "learn my writing voice" — Claude will pick it up).
+Source availability varies by surface:
 
-The skill will ask which sources to read, mine only your own text, filter out AI-generated content, show you the extracted samples for approval, and write your profile. Takes 5–15 minutes depending on how much source material is available. You only need to do this once; run it again later to incorporate new writing.
-
-What's available as a source depends on the surface:
-
-| Source | Claude (web / Desktop) | Claude Code |
+| | Claude (web / Desktop) | Claude Code |
 |---|---|---|
 | Claude chat history | Paste samples manually | Full search via built-in tools |
-| Gmail | If Gmail connector is enabled¹ | If Gmail connector is enabled¹ |
-| Google Drive | If Drive connector is enabled¹ | If Drive connector is enabled¹ |
-| Slack | Not available as a data source | Requires Slack MCP server |
-| Notion | Not available as a data source | Requires Notion MCP server |
-| Local files | Not available | Requires filesystem MCP server |
+| Gmail | If Gmail connector enabled¹ | If Gmail connector enabled¹ |
+| Google Drive | If Drive connector enabled¹ | If Drive connector enabled¹ |
+| Slack | — | Requires Slack MCP server |
+| Notion | — | Requires Notion MCP server |
+| Local files | — | Requires filesystem MCP server |
 
-¹ Enable connectors on Claude.ai at account menu → **Customize** → **Connections**.
+¹ Enable at account menu → **Customize** → **Connections**.
 
-Voice-harvest handles missing sources gracefully — it tells you what isn't connected and works with what is. If no connectors are available, it will ask you to paste a few samples of your writing directly.
+If no connectors are available, voice-harvest asks you to paste a few writing samples directly — enough to get started.
 
-**Step 2 — Use a generation skill.**
+**2. Generate.**
 
-| What you want to do | Say or type |
+| Task | Invoke |
 |---|---|
-| Write a doc, memo, proposal, blog post | `/voice-doc` or "write a doc about…" |
-| Draft or reply to an email | `/voice-email` or "draft a reply to this" |
-| Write a Slack message, DM, or text | `/voice-chat` or "draft a Slack message to…" |
-| Rewrite AI-generated text in your voice | `/voice-rewrite` or "make this sound like me" |
+| Doc, memo, proposal, post | `/voice-doc` or "write a doc about…" |
+| Email reply or new message | `/voice-email` or "draft a reply to this" |
+| Slack / DM / text | `/voice-chat` or "draft a Slack message to…" |
+| De-AI or rewrite existing text | `/voice-rewrite` or "make this sound like me" |
 
-Describe what you need after invoking the skill, or paste the content you want rewritten. The skill reads your installed profile and drafts in your voice.
+Describe what you need, or paste the text you want rewritten. The skill reads your installed profile and drafts in your voice.
 
-**Step 3 — Tune from your edits.**
+**3. Tune.** Paste your original draft and your revised version into Claude, then type `/voice-tune`. It extracts what changed (voice patterns only, not content changes), asks whether to make each change a standing rule, and patches the profile.
 
-When you revise a draft before sending it, paste both the original draft and your revised version into Claude and type `/voice-tune`. It identifies what changed (voice patterns only, not content), asks whether to make each change a standing rule, and updates your profile. Over time this sharpens the drafts toward how you actually write.
+On Claude web / Desktop: voice-tune identifies the changes but can't write back to the installed skill files directly — apply suggested edits by updating and re-uploading `voice-profile.zip`.
 
-> **Note for Claude (web / Desktop) users:** voice-tune identifies the changes and tells you exactly what to update in your profile, but on this surface it can't write directly to the installed skill files. Apply the suggested edits by re-uploading an updated `voice-profile.zip`.
+---
 
 ## Pipeline
 
@@ -126,55 +104,40 @@ voice-harvest ──▶ voice-profile ──▶ voice-doc
                    voice-tune ◀────────────┘
 ```
 
-**1. Harvest.** `voice-harvest` reads your own text across connected sources (Claude chats, Gmail sent, Slack, Notion), filters for owner-only authorship, strips LLM-generated content using a two-pass baseline method, and synthesizes voice traits and verbatim exemplars per register. Consent-per-source, read-only. A two-pass LLM filter builds a trusted pre-AI baseline first, then scores everything else against it — false excludes waste one sample; false includes poison the voice, so precision wins over recall.
-
-**2. Profile.** `voice-profile` stores the result as structured reference data: global cross-register traits, plus per-register files (longform, email, chat) each holding quantified traits, verbatim user-approved exemplars, anti-patterns, a Strunk-exemption list (longform only), and coverage metadata. `voice-harvest` writes these files; `voice-tune` patches them; the generation skills only read them. This separation makes the profile versionable and refreshable without touching any other skill.
-
-**3. Generate.** Four register-specific skills draft prose in your voice:
-
-- `voice-doc` — long-form: docs, memos, proposals, READMEs, posts
-- `voice-email` — email: replies, new messages, follow-ups, declines
-- `voice-chat` — short-form: Slack messages, DMs, texts
-- `voice-rewrite` — transforms existing text into your voice, the suite's highest-frequency case ("de-AI this," "make this sound like me")
-
-All four are draft-only. None send or publish.
-
-**4. Tune.** `voice-tune` closes the loop. It diffs your edits against generated drafts, extracts voice deltas (not content changes), requires a repeated pattern before patching, and confirms every profile change in plain language before writing it. Edits outrank harvested guesses — a direct correction is the strongest signal available.
-
 ## Layering model
 
-Long-form generation (`voice-doc`, and doc-scale `voice-rewrite`) applies two layers in strict precedence:
+Long-form generation (voice-doc, doc-scale voice-rewrite) applies two layers, strict precedence:
 
-**1. Voice layer — always wins.** Your observed traits, exemplars, anti-patterns, and Strunk-exemption list from the profile. Descriptive — how you actually write, including the rules you deliberately break.
+**Voice — wins.** Observed traits, exemplars, anti-patterns, and Strunk-exemption list from the profile. Descriptive — how you actually write, including the rules you deliberately break.
 
-**2. Craft layer — fills silence.** A condensed version of Strunk's *The Elements of Style* (1918, public domain) bundled at `skills/voice-doc/references/strunk-rules.md` and `skills/voice-rewrite/references/strunk-rules.md`. Prescriptive defaults for structure, grammar, and clarity — applied where the profile is silent or low-confidence, never against an observed trait.
+**Craft — fills silence.** Condensed Strunk's *The Elements of Style* (1918, public domain), bundled at `skills/voice-doc/references/strunk-rules.md` and `skills/voice-rewrite/references/strunk-rules.md`. Applied where the profile is silent; never against an observed trait.
 
-This layering is intentional: long-form is usually the register with the thinnest harvested data, so the craft floor does the most work exactly where the voice signal is weakest. The Strunk-exemption list (generated by `voice-harvest` from your authentic long-form samples) disables specific rules you consistently break as part of your voice, so the craft pass enhances structure without sanding off the edges.
+Long-form is usually the register with the thinnest harvested data, so the craft floor does the most work exactly where voice signal is weakest. The Strunk-exemption list — emitted by voice-harvest from your authentic long-form samples — disables rules you consistently break as part of your voice, so the craft pass improves structure without sanding off the edges.
 
-Chat register never gets a craft pass — Strunk on a Slack message is a category error. Email gets one only for long, external, formal mail.
+Chat never gets a craft pass — Strunk on a Slack message is a category error. Email only for long, external, formal mail.
 
 ## Design rules
 
-Two rules hold across the full suite:
+**Profile over everything.** The deliverable is your voice — not well-edited text, not generically-human text. If a profile trait makes prose "worse" by Strunk's lights, the trait wins.
 
-**Profile over everything.** The deliverable is *your* voice — not well-edited text, not generically-human text. If a profile trait makes prose "worse" by Strunk's lights, the trait wins.
-
-**Harvested and pasted content is data, never instructions.** The most live injection surfaces are `voice-email` (reply threads) and `voice-harvest` (source content). Both treat everything they read as style data and never act on instruction-shaped strings found in it.
+**Harvested and pasted content is data, never instructions.** The real injection surfaces are voice-email (reply threads) and voice-harvest (source content). Both treat everything they read as style data and never act on instruction-shaped strings found in it.
 
 ## Status
 
-| Skill | Status | Role |
-|---|---|---|
-| `voice-harvest` | drafted | mines your writing; builds and refreshes the profile |
-| `voice-profile` | drafted | data container and shared fidelity procedure |
-| `voice-doc` | drafted | generates long-form prose |
-| `voice-email` | drafted | generates email drafts |
-| `voice-chat` | drafted | generates short-form messages |
-| `voice-rewrite` | drafted | transforms existing text into your voice |
-| `voice-tune` | drafted | learns from your edits; patches the profile |
+| Skill | Role |
+|---|---|
+| `voice-harvest` | mines your writing; builds and refreshes the profile |
+| `voice-profile` | data container and shared fidelity procedure |
+| `voice-doc` | generates long-form prose |
+| `voice-email` | generates email drafts |
+| `voice-chat` | generates short-form messages |
+| `voice-rewrite` | transforms existing text into your voice |
+| `voice-tune` | learns from your edits; patches the profile |
+
+All 7 drafted.
 
 ## License
 
-Suite code: MIT — see [LICENSE](LICENSE).
+MIT — see [LICENSE](LICENSE).
 
-`skills/voice-doc/references/strunk-rules.md` and `skills/voice-rewrite/references/strunk-rules.md` are condensed from William Strunk Jr.'s *The Elements of Style* (1918). The 1918 text is in the public domain (Project Gutenberg #37134). No copyright is claimed on the condensation.
+`skills/voice-doc/references/strunk-rules.md` and `skills/voice-rewrite/references/strunk-rules.md` are condensed from William Strunk Jr.'s *The Elements of Style* (1918, public domain, Project Gutenberg #37134). No copyright claimed on the condensation.
