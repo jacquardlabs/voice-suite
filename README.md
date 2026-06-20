@@ -83,7 +83,7 @@ Source availability varies by surface:
 
 | | Claude (web / Desktop) | Claude Code |
 |---|---|---|
-| Claude chat history | Paste samples manually | Full search via built-in tools |
+| Claude chat history | Via relay prompt (skill provides it) | Full search via built-in tools |
 | Gmail | If Gmail connector enabled¹ | If Gmail connector enabled¹ |
 | Google Drive | If Drive connector enabled¹ | If Drive connector enabled¹ |
 | Slack | — | Requires Slack MCP server |
@@ -92,7 +92,7 @@ Source availability varies by surface:
 
 ¹ Enable at account menu → **Customize** → **Connections**.
 
-If no connectors are available, voice-harvest asks you to paste a few writing samples directly — enough to get started.
+If no connectors are available and chat history tools aren't accessible, voice-harvest gives you a relay prompt to run in a Claude surface that does have history access — paste the response back and it continues from there.
 
 **2. Generate.**
 
