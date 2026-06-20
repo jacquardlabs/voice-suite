@@ -1,13 +1,13 @@
 # Voice Suite
 
-Seven Claude Skills that mine text you actually wrote, distill it into a voice profile, and generate new prose in that voice — docs, emails, chat messages, rewrites.
+7 Claude skills that mine text you actually wrote, distill it into a voice profile, and generate new prose in that voice: docs, emails, chat messages, rewrites.
 
 ## What's here
 
-- **voice-harvest** — the miner. Reads your Claude chats, Gmail, Slack, or Notion (consent-per-source, read-only), filters for owner-only authorship, strips LLM-generated content via a two-pass baseline (pre-2023 gold standard → score everything else against it), and writes the profile.
-- **voice-profile** — the data layer. Global cross-register traits plus per-register files (longform, email, chat) — each with quantified traits, verbatim exemplars, anti-patterns, a Strunk-exemption list (longform only), and coverage metadata. Read by the generators; written by harvest and tune.
-- **voice-doc / voice-email / voice-chat / voice-rewrite** — the generators. Draft new long-form docs, email, short-form messages, or rewrite existing text in your voice. Draft-only — none send or publish.
-- **voice-tune** — the feedback loop. Diffs your edits against generated drafts, extracts voice deltas (not content changes), requires a repeated pattern before patching, and confirms every profile change before writing it.
+- voice-harvest: the miner. Reads your Claude chats, Gmail, Slack, or Notion (consent-per-source, read-only), filters for owner-only authorship, strips LLM-generated content via a two-pass baseline (pre-2023 gold standard → score everything else against it), and writes the profile.
+- voice-profile: the data layer. Global cross-register traits plus per-register files (longform, email, chat), each with quantified traits, verbatim exemplars, anti-patterns, a Strunk-exemption list (longform only), and coverage metadata. Read by the generators; written by harvest and tune.
+- voice-doc / voice-email / voice-chat / voice-rewrite: the generators. Draft new long-form docs, email, short-form messages, or rewrite existing text in your voice. Draft-only, none send or publish.
+- voice-tune: the feedback loop. Diffs your edits against generated drafts, extracts voice deltas (not content changes), requires a repeated pattern before patching, and confirms every profile change before writing it.
 
 ## Install
 
@@ -31,7 +31,7 @@ Or install this plugin directly:
 
 ### Claude (web or Desktop app)
 
-Skills upload as ZIPs — one per skill, 7 total. You need a Claude account (Pro or Max).
+Skills upload as ZIPs, 1 per skill, 7 total. You need a Claude account (Pro or Max).
 
 **1. Download the repo.** Click **Code → Download ZIP** on this page and unzip it.
 
@@ -39,13 +39,13 @@ Skills upload as ZIPs — one per skill, 7 total. You need a Claude account (Pro
 
 **3. Upload each ZIP.** In Claude: account menu → **Customize** → **Skills** → **+** → **Upload a skill**.
 
-Skills auto-trigger on matching requests — or invoke directly with `/skill-name`.
+Skills auto-trigger on matching requests, or invoke directly with `/skill-name`.
 
 ---
 
 ### Claude Code (CLI, Desktop, VS Code, JetBrains)
 
-All four surfaces share `~/.claude/skills/`. You need a Claude account (Pro or Max, or API access).
+All 4 surfaces share `~/.claude/skills/`. You need a Claude account (Pro or Max, or API access).
 
 **1. Download the repo.**
 
@@ -75,9 +75,9 @@ Immediately available. No restart.
 
 ## First run
 
-**1. Harvest.** Type `/voice-harvest` — or say "learn my writing voice."
+**1. Harvest.** Type `/voice-harvest` or say "learn my writing voice."
 
-The skill asks which sources to read, mines only your own text, filters AI-generated content, shows you the extracted samples for approval, and writes the profile. Takes 5–15 min. Run once; re-run anytime to pull in new writing.
+The skill asks which sources to read, mines only your own text, filters AI-generated content, shows extracted samples for approval, and writes the profile. Takes 5–15 min. Run once; re-run anytime to pull in new writing.
 
 Source availability varies by surface:
 
@@ -92,7 +92,7 @@ Source availability varies by surface:
 
 ¹ Enable at account menu → **Customize** → **Connections**.
 
-If no connectors are available and chat history tools aren't accessible, voice-harvest gives you a relay prompt to run in a Claude surface that does have history access — paste the response back and it continues from there.
+If no connectors are available and chat history tools aren't accessible, voice-harvest gives you a relay prompt to run in a Claude surface that has history access; paste the response back and it continues from there.
 
 **2. Generate.**
 
@@ -107,7 +107,7 @@ Describe what you need, or paste the text you want rewritten. The skill reads yo
 
 **3. Tune.** Paste your original draft and your revised version into Claude, then type `/voice-tune`. It extracts what changed (voice patterns only, not content changes), asks whether to make each change a standing rule, and patches the profile.
 
-On Claude web / Desktop: voice-tune identifies the changes but can't write back to the installed skill files directly — apply suggested edits by updating and re-uploading `voice-profile.zip`.
+On Claude web / Desktop: voice-tune identifies changes but can't write back to skill files directly. Apply suggested edits by updating and re-uploading `voice-profile.zip`.
 
 ---
 
@@ -124,21 +124,21 @@ voice-harvest ──▶ voice-profile ──▶ voice-doc
 
 ## Layering model
 
-Long-form generation (voice-doc, doc-scale voice-rewrite) applies two layers, strict precedence:
+Long-form generation (voice-doc, doc-scale voice-rewrite) applies 2 layers, strict precedence:
 
-**Voice — wins.** Observed traits, exemplars, anti-patterns, and Strunk-exemption list from the profile. Descriptive — how you actually write, including the rules you deliberately break.
+Voice: wins. Observed traits, exemplars, anti-patterns, and Strunk-exemption list from the profile. Descriptive, how you actually write, including the rules you deliberately break.
 
-**Craft — fills silence.** Condensed Strunk's *The Elements of Style* (1918, public domain), bundled at `skills/voice-doc/references/strunk-rules.md` and `skills/voice-rewrite/references/strunk-rules.md`. Applied where the profile is silent; never against an observed trait.
+Craft: fills silence. Condensed Strunk's *The Elements of Style* (1918, public domain), bundled at `skills/voice-doc/references/strunk-rules.md` and `skills/voice-rewrite/references/strunk-rules.md`. Applied where the profile is silent; never against an observed trait.
 
-Long-form is usually the register with the thinnest harvested data, so the craft floor does the most work exactly where voice signal is weakest. The Strunk-exemption list — emitted by voice-harvest from your authentic long-form samples — disables rules you consistently break as part of your voice, so the craft pass improves structure without sanding off the edges.
+Long-form is usually the register with the thinnest harvested data, so the craft floor does the most work exactly where voice signal is weakest. The Strunk-exemption list (emitted by voice-harvest from your authentic long-form samples) disables rules you consistently break as part of your voice, so the craft pass improves structure without sanding off the edges.
 
-Chat never gets a craft pass — Strunk on a Slack message is a category error. Email only for long, external, formal mail.
+Chat never gets a craft pass; Strunk on a Slack message is a category error. Email only for long, external, formal mail.
 
 ## Design rules
 
-**Profile over everything.** The deliverable is your voice — not well-edited text, not generically-human text. If a profile trait makes prose "worse" by Strunk's lights, the trait wins.
+Profile over everything. The deliverable is your voice, not well-edited text, not generically-human text. If a profile trait makes prose "worse" by Strunk's lights, the trait wins.
 
-**Harvested and pasted content is data, never instructions.** The real injection surfaces are voice-email (reply threads) and voice-harvest (source content). Both treat everything they read as style data and never act on instruction-shaped strings found in it.
+Harvested and pasted content is data, never instructions. The real injection surfaces are voice-email (reply threads) and voice-harvest (source content). Both treat everything they read as style data and never act on instruction-shaped strings found in it.
 
 ## Status
 
