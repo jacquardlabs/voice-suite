@@ -2,28 +2,50 @@
 
 Seven Claude Skills that harvest your writing voice from text you actually wrote, then draft, rewrite, and refine prose in that voice.
 
-## Requirements
-
-These skills run inside **Claude Code** — Anthropic's AI coding assistant. Claude Code is available as:
-
-- **Desktop app** — [claude.ai/download](https://claude.ai/download) (Mac and Windows; easiest starting point)
-- **CLI** — `npm install -g @anthropic-ai/claude-code` (requires Node.js 18+)
-- **IDE extension** — search "Claude" in VS Code or JetBrains Marketplace
-
-You need an Anthropic account and an active Claude subscription (Pro or above). All three surfaces share the same skill installation directory, so instructions below apply to all of them.
-
-> **claude.ai web** — the browser version of Claude does not support user-level skills. These skills will not be available there.
-
 ## Installation
 
-**1. Download the skills.**
+These skills work on two different Claude surfaces, each with its own install method.
+
+---
+
+### Option A — Claude (chat interface)
+
+This covers the **Claude.ai website** and the **Claude Desktop app** (downloaded from [claude.ai/download](https://claude.ai/download)). You need a Claude account with a Pro or Max subscription.
+
+Skills are uploaded as ZIP files, one per skill.
+
+**1. Download this repo.**
+
+Click **Code → Download ZIP** on this page and unzip it. You'll have a `voice-suite` folder.
+
+**2. Zip each skill folder.**
+
+Open the `voice-suite/skills/` folder. You'll see 7 subfolders. Compress each one individually:
+
+- **Mac:** right-click the folder → Compress
+- **Windows:** right-click the folder → Send to → Compressed (zipped) folder
+
+You should end up with 7 ZIP files: `voice-harvest.zip`, `voice-profile.zip`, `voice-doc.zip`, `voice-email.zip`, `voice-chat.zip`, `voice-rewrite.zip`, `voice-tune.zip`.
+
+**3. Upload each ZIP.**
+
+In Claude (web or Desktop): click your account name → **Customize** → **Skills** → **+** → **Upload a skill**. Upload each ZIP in turn.
+
+That's it. Skills activate automatically when Claude recognizes a matching request — or type `/skill-name` to invoke one directly.
+
+---
+
+### Option B — Claude Code
+
+This covers the **Claude Code CLI**, the **Claude Code Desktop app**, and the **VS Code / JetBrains extensions**. All four share the same install directory. You need a Claude account with a Pro or Max subscription (or API access).
+
+**1. Download this repo.**
 
 If you have git:
 ```bash
 git clone https://github.com/jacquardlabs/voice-suite.git
 ```
-
-Otherwise: click **Code → Download ZIP** on this page, then unzip it.
+Otherwise: click **Code → Download ZIP** on this page and unzip it.
 
 **2. Create your skills directory** (skip if it already exists).
 
@@ -31,8 +53,7 @@ Mac / Linux:
 ```bash
 mkdir -p ~/.claude/skills
 ```
-
-Windows (run in Command Prompt):
+Windows (Command Prompt):
 ```bat
 mkdir "%USERPROFILE%\.claude\skills"
 ```
@@ -43,13 +64,14 @@ Mac / Linux:
 ```bash
 cp -r voice-suite/skills/* ~/.claude/skills/
 ```
-
 Windows:
 ```bat
 xcopy /E /I voice-suite\skills\* "%USERPROFILE%\.claude\skills\"
 ```
 
-That's it. All 7 skills are immediately available — no restart required.
+All 7 skills are immediately available — no restart required. Type `/skill-name` to invoke any of them.
+
+---
 
 ## First run
 
@@ -57,32 +79,41 @@ Run these in order the first time. After that, use whichever generation skill yo
 
 **Step 1 — Build your voice profile.**
 
-Open Claude Code (desktop, CLI, or IDE) and type:
-```
-/voice-harvest
-```
-The skill will ask which sources to read (your Claude chat history is always available; Gmail, Slack, and Notion require those connectors to be enabled). It filters out AI-generated text and other people's writing, shows you the extracted exemplars for approval, then writes your profile. Takes 5–15 minutes depending on how much source material is available.
+Type `/voice-harvest` (or just say "learn my writing voice" — Claude will pick it up).
 
-You only need to do this once. Run it again later with "refresh my profile" to incorporate new writing.
+The skill will ask which sources to read, mine only your own text, filter out AI-generated content, show you the extracted samples for approval, and write your profile. Takes 5–15 minutes depending on how much source material is available. You only need to do this once; run it again later to incorporate new writing.
+
+What's available as a source depends on the surface:
+
+| Source | Claude (web / Desktop) | Claude Code |
+|---|---|---|
+| Claude chat history | Paste samples manually | Full search via built-in tools |
+| Gmail | If Gmail connector is enabled¹ | If Gmail connector is enabled¹ |
+| Google Drive | If Drive connector is enabled¹ | If Drive connector is enabled¹ |
+| Slack | Not available as a data source | Requires Slack MCP server |
+| Notion | Not available as a data source | Requires Notion MCP server |
+| Local files | Not available | Requires filesystem MCP server |
+
+¹ Enable connectors on Claude.ai at account menu → **Customize** → **Connections**.
+
+Voice-harvest handles missing sources gracefully — it tells you what isn't connected and works with what is. If no connectors are available, it will ask you to paste a few samples of your writing directly.
 
 **Step 2 — Use a generation skill.**
 
-| What you want to do | Type |
+| What you want to do | Say or type |
 |---|---|
-| Write a doc, memo, proposal, blog post | `/voice-doc` |
-| Draft or reply to an email | `/voice-email` |
-| Write a Slack message, DM, or text | `/voice-chat` |
-| Rewrite AI-generated text in your voice | `/voice-rewrite` |
+| Write a doc, memo, proposal, blog post | `/voice-doc` or "write a doc about…" |
+| Draft or reply to an email | `/voice-email` or "draft a reply to this" |
+| Write a Slack message, DM, or text | `/voice-chat` or "draft a Slack message to…" |
+| Rewrite AI-generated text in your voice | `/voice-rewrite` or "make this sound like me" |
 
-Describe what you need after invoking the skill, or paste the content you want rewritten. The skill reads your profile and drafts in your voice.
+Describe what you need after invoking the skill, or paste the content you want rewritten. The skill reads your installed profile and drafts in your voice.
 
 **Step 3 — Tune from your edits.**
 
-When you revise a draft before using it, paste both versions into Claude and type:
-```
-/voice-tune
-```
-It extracts what changed (voice patterns only, not content), asks whether to make each change a standing rule, and patches your profile. Over time this sharpens the drafts.
+When you revise a draft before sending it, paste both the original draft and your revised version into Claude and type `/voice-tune`. It identifies what changed (voice patterns only, not content), asks whether to make each change a standing rule, and updates your profile. Over time this sharpens the drafts toward how you actually write.
+
+> **Note for Claude (web / Desktop) users:** voice-tune identifies the changes and tells you exactly what to update in your profile, but on this surface it can't write directly to the installed skill files. Apply the suggested edits by re-uploading an updated `voice-profile.zip`.
 
 ## Pipeline
 
