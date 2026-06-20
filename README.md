@@ -11,6 +11,24 @@ Seven Claude Skills that mine text you actually wrote, distill it into a voice p
 
 ## Install
 
+### Claude Code (plugin system)
+
+Install via the Jacquard Labs marketplace:
+
+```bash
+/plugin marketplace add jacquardlabs/marketplace
+/plugin install voice-suite@jacquardlabs-marketplace
+```
+
+Or install this plugin directly:
+
+```bash
+/plugin marketplace add jacquardlabs/voice-suite
+/plugin install voice-suite@voice-suite
+```
+
+---
+
 ### Claude (web or Desktop app)
 
 Skills upload as ZIPs — one per skill, 7 total. You need a Claude account (Pro or Max).
