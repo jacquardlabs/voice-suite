@@ -51,3 +51,29 @@ changeset.
    consolidated list from `routing-tells-consolidation` — the dependency edge exists
    exactly to prevent a fifth divergent list; the worker's brief must point at the
    committed `references/ai-tells.md` path explicitly.
+
+8. **The durability fix causes the exact data loss it exists to prevent, one last
+   time.** A user who harvested under the old scheme has profile data inside the
+   installed skill's `references/`. The first `/plugin update` after `profile-durability`
+   ships wipes that directory before the new resolution order ever reads from it —
+   existing users silently regress to unprofiled prose unless voice-harvest's Output
+   step does a one-time copy-forward (checks the old location for populated,
+   non-template files before treating a run as a fresh harvest). Folded in from
+   `profile-durability`'s own story-level pre-mortem (item 2).
+
+9. **Canonical/threshold text duplicated across files is a recurring theme, not a
+   one-story problem.** `profile-durability` stamps one resolution-order string across
+   7 files (now guarded by `scripts/check-canonical-resolution-string.sh` in CI);
+   `evidence-standards` maintains threshold numbers in 2-3 places (`_format.md`, the
+   harvest synthesis step, the relay-prompt fallback). Any later story that edits these
+   regions (`fidelity-consistency`, `routing-tells-consolidation`) must run the guard
+   script and re-diff the threshold copies, not just eyeball the change. Folded in from
+   both stories' pre-mortems.
+
+10. **`## Pending observations` ships permanently inert.** No story in this epic wires
+    a producer that writes to it — voice-tune's promotion logic (the eventual
+    consumer) is future work. A user who opens their profile after `evidence-standards`
+    lands sees a section that never populates, which reads as broken rather than
+    "not built yet." The epic finale should confirm this gap was accepted explicitly
+    (not silently), and that a follow-up issue exists for wiring the producer. Folded
+    in from `evidence-standards`' own story-level pre-mortem (items 5, 7).
