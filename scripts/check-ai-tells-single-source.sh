@@ -30,6 +30,14 @@
 # question 2) as an in-spirit, not literally-named, inclusion -- left for
 # the gate to confirm rather than resolved unilaterally by this story.
 #
+# This also verifies every pointer outside voice-profile's own bundle is
+# *fully qualified* (`voice-profile/references/ai-tells.md`), not bare
+# (`references/ai-tells.md`) -- a bare path only resolves inside
+# voice-profile's own skill bundle, so it silently fails to resolve from
+# any other skill. This exact bug shipped once, in voice-check/SKILL.md,
+# and nothing here caught it because the pointer check below only tested
+# for the substring `ai-tells.md`, which a bare path also contains.
+#
 # Usage: scripts/check-ai-tells-single-source.sh
 # Exit 0 and silent on success; exit 1 with the offending line(s) on drift.
 
@@ -45,6 +53,17 @@ POINTER_FILES=(
   "skills/voice-profile/SKILL.md"
   "skills/voice-rewrite/SKILL.md"
   "skills/voice-harvest/SKILL.md"
+  "skills/voice-check/SKILL.md"
+)
+
+# Consumers whose pointer must be fully qualified with `voice-profile/` --
+# unlike voice-profile/SKILL.md itself, which lives inside that bundle
+# already and correctly uses a bare path.
+QUALIFIED_POINTER_FILES=(
+  "skills/voice-rewrite/SKILL.md"
+  "skills/voice-harvest/SKILL.md"
+  "skills/voice-check/SKILL.md"
+  "$RELAY_PROMPT_EXCEPTION"
 )
 
 # Distinctive fragments of the pre-consolidation restatements. A match
@@ -78,13 +97,34 @@ done < <(find skills -name '*.md' -print0)
 
 for f in "${POINTER_FILES[@]}"; do
   if [[ ! -f "$f" ]]; then
-    echo "MISSING: $f does not exist (expected one of the 3 canonical consumers)" >&2
+    echo "MISSING: $f does not exist (expected one of the 4 canonical consumers)" >&2
     status=1
     continue
   fi
 
   if ! grep -q 'ai-tells.md' "$f"; then
     echo "NO POINTER: $f does not reference ai-tells.md (expected a pointer, not a restatement)" >&2
+    status=1
+  fi
+done
+
+BARE_AI_TELLS_PATTERN='references/ai-tells\.md'
+QUALIFIED_AI_TELLS_PATTERN='voice-profile/references/ai-tells\.md'
+
+for f in "${QUALIFIED_POINTER_FILES[@]}"; do
+  if [[ ! -f "$f" ]]; then
+    echo "MISSING: $f does not exist (expected one of the qualified-pointer files)" >&2
+    status=1
+    continue
+  fi
+
+  all_hits=$(grep -nE "$BARE_AI_TELLS_PATTERN" "$f" || true)
+  [[ -z "$all_hits" ]] && continue
+
+  bare_hits=$(echo "$all_hits" | grep -vE "$QUALIFIED_AI_TELLS_PATTERN" || true)
+  if [[ -n "$bare_hits" ]]; then
+    echo "UNQUALIFIED PATH: $f references bare 'references/ai-tells.md', which only resolves inside voice-profile's own bundle -- qualify to 'voice-profile/references/ai-tells.md':" >&2
+    echo "$bare_hits" >&2
     status=1
   fi
 done
