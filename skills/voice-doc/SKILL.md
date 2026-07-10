@@ -75,7 +75,7 @@ leans on craft rules more than on their profile.
 ### Step 1: Load the voice
 
 Resolve the profile directory per "Resolving the profile" above, then read
-`global.md` (global traits) and `references/longform.md` (the long-form
+`global.md` (global traits) and `longform.md` (the long-form
 register: traits, exemplars, anti-patterns, Strunk exemptions,
 coverage/confidence metadata) from it.
 

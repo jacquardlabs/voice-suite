@@ -56,7 +56,7 @@ Strunk" — those are different targets and only the first one is the job.
    file to load and whether the craft layer applies.
 
 2. **Load the matching register.** Read `global.md` and the matching
-   `references/{chat,email,longform}.md` from the resolved directory (above).
+   `{chat,email,longform}.md` from the resolved directory (above).
    Re-read exemplars. No profile? Run an ad-hoc session profile from 2–4
    pasted samples of the user's real writing, or say you're working in
    neutral register and offer voice-harvest for a persistent profile.

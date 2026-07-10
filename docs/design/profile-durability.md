@@ -291,6 +291,23 @@ other skill uses, rather than one generator's special-cased hardcoded path.
    *next* `/plugin update` lands before they ever run harvest or tune again
    post-fix loses the old data regardless — same outcome as today, not a
    regression this design introduces, just not fully closed by it either.
+
+   **Decision (acceptance re-check, profile-durability):** accept the
+   residual risk; do not build the copy-forward. The proposed mitigation
+   doesn't actually close the gap it targets — a user only *gets* the fixed
+   voice-harvest by running `/plugin update` first, and that same update
+   replaces the `voice-profile` skill directory (including the pre-fix
+   `## Global traits` section and any pre-fix register data) *before* a
+   fixed harvest ever runs. By the time copy-forward code could execute, the
+   source it would read from is already gone on Claude Code; on claude.ai
+   the pre-fix data lives only in the user's already-downloaded zip, which
+   harvest has no access to either way. A copy-forward step here would be
+   inert in the ordinary update path and would lean on a pre-fix path this
+   doc's Open Question 2 already flags as unverified — worse than an honest
+   acceptance. Remedy for affected users is to re-run `/voice-harvest` after
+   updating (re-mine, not recover); this is the same "old data doesn't
+   survive an update most users won't retroactively notice" outcome this
+   story already ships with today, not a regression the fix introduces.
 2. **Is `~/.claude/` always the right root?** This design assumes the
    Claude Code config directory is `~/.claude/` by default, per the README's
    existing documentation of `~/.claude/skills/`. If Claude Code supports an

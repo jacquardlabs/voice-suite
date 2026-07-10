@@ -49,7 +49,7 @@ first contact vs. ongoing back-and-forth.
 
 ## Workflow
 
-1. **Load the email register.** Read `global.md` and `references/email.md`
+1. **Load the email register.** Read `global.md` and `email.md`
    from the resolved directory (above). Re-read 2–3 exemplars before
    drafting. If no profile exists, fall back to an ad-hoc session profile
    from 2–3 pasted real emails the user wrote, or say you're drafting in

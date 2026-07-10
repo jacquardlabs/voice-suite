@@ -121,7 +121,10 @@ wipe. Where it actually lives depends on the surface:
   a sibling of `~/.claude/skills/` and `~/.claude/plugins/`, outside both, so
   neither an update nor a reinstall of either kind ever touches it.
   voice-harvest creates this directory on first run; every later harvest and
-  tune writes here.
+  tune writes here. If you harvested a profile before this directory
+  existed, that data lived inside the plugin-managed skill directory and
+  does not carry forward automatically — re-run `/voice-harvest` once after
+  updating to rebuild it here.
 - **Claude (web or Desktop app).** No writable location outside the uploaded
   skill bundle persists between conversations on this surface, so the
   installed `voice-profile` skill's own files are the only copy that exists.

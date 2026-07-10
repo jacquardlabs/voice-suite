@@ -50,7 +50,7 @@ mostly about restraint.
 
 ## Workflow
 
-1. **Load the chat register.** Read `global.md` and `references/chat.md`
+1. **Load the chat register.** Read `global.md` and `chat.md`
    from the resolved directory (above). Re-read a few exemplars. No profile?
    Pull an ad-hoc read from a few of the user's real messages in the current
    thread, or ask for a couple of examples of how they text.

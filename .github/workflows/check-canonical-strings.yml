@@ -15,3 +15,6 @@ jobs:
 
       - name: Run guard
         run: bash scripts/check-canonical-resolution-string.sh
+
+      - name: Run flat-register-read guard
+        run: bash scripts/check-flat-register-reads.sh
