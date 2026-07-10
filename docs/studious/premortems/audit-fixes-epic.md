@@ -77,3 +77,20 @@ changeset.
     "not built yet." The epic finale should confirm this gap was accepted explicitly
     (not silently), and that a follow-up issue exists for wiring the producer. Folded
     in from `evidence-standards`' own story-level pre-mortem (items 5, 7).
+
+11. **`fidelity-consistency` leaves one cross-register inconsistency unfixed.**
+    voice-rewrite's email-scale craft clause ("only if long and formal") still applies
+    the longform Strunk-exemption list to long formal email-scale rewrites after this
+    story lands, while voice-email itself no longer does — the suite is only partly
+    consistent on the exact axis the epic exists to fix. The finale should confirm a
+    follow-up issue was filed for voice-rewrite's copy, not silently dropped. Folded in
+    from `fidelity-consistency`'s own story-level pre-mortem (item 6).
+
+12. **`voice-card-export`'s new 8th consumer needs the canonical-string guard extended,
+    and has no fidelity procedure of its own to catch drift.** `scripts/check-canonical-
+    resolution-string.sh`'s file list must grow from 7 to 8 (`skills/voice-card/SKILL.md`)
+    or drift in the newest consumer goes uncaught. Separately, voice-card exports
+    never-words and a low-confidence disclosure onto a surface with no generator-style
+    fidelity check — a trimmed never-words list or an omitted disclosure line ships
+    silently. The finale should verify both are covered. Folded in from
+    `voice-card-export`'s own story-level pre-mortem (items 1, 4, 6).
