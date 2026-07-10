@@ -18,3 +18,6 @@ jobs:
 
       - name: Run flat-register-read guard
         run: bash scripts/check-flat-register-reads.sh
+
+      - name: Run fallback-sample-count guard
+        run: bash scripts/check-fallback-sample-count.sh

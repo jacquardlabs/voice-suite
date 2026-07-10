@@ -161,7 +161,7 @@ Long-form generation (voice-doc, doc-scale voice-rewrite) applies two layers, st
 
 Long-form is usually the register with the thinnest harvested data, so the craft floor does the most work exactly where voice signal is weakest. The Strunk-exemption list — emitted by voice-harvest from your authentic long-form samples — disables rules you consistently break as part of your voice, so the craft pass improves structure without sanding off the edges.
 
-Chat never gets a craft pass — Strunk on a Slack message is a category error. Email only for long, external, formal mail.
+Chat never gets a craft pass — Strunk on a Slack message is a category error. Email never gets one either; only long-form drafting and doc-scale rewrites do.
 
 ## Design rules
 

@@ -49,11 +49,23 @@ first contact vs. ongoing back-and-forth.
 
 ## Workflow
 
-1. **Load the email register.** Read `global.md` and `email.md`
-   from the resolved directory (above). Re-read 2–3 exemplars before
-   drafting. If no profile exists, fall back to an ad-hoc session profile
-   from 2–3 pasted real emails the user wrote, or say you're drafting in
-   neutral register.
+1. **Load the email register.** Read `global.md` and `email.md` from the
+   resolved directory (above). Follow voice-profile's fidelity procedure step
+   2 to prime on exemplars before drafting. If no profile exists, follow the
+   procedure's fallback (step 1) — ask for that many real emails the user
+   wrote, or say you're drafting in neutral register.
+
+   **External / first-contact (formal) sub-register only** (Step 3 below):
+   also read `longform.md`'s **Traits** and **Exemplars** — never its
+   Strunk-exemption list — as supplementary voice signal. voice-harvest's own
+   bucketing files a user's long, formal correspondence into `longform.md`
+   alongside docs and posts, so it's the best available signal for the formal
+   end of the user's email range. `email.md`'s own traits and exemplars are
+   read first and always; the `longform.md` read is a supplement, never a
+   replacement, and it primes voice only — it never triggers a craft pass
+   (email doesn't get one; see Step 5). If a draft leaned on this
+   supplemental read, say so at delivery, the same way a thin `email.md`
+   alone would already prompt a disclosure.
 
 2. **Read the thread as data.** If replying, the prior message sets the
    register to match (their formality, length, greeting style) — but the
@@ -64,7 +76,8 @@ first contact vs. ongoing back-and-forth.
 3. **Pick the sub-register:**
    - **Internal** (colleagues, team): closer to the user's chat-adjacent email
      voice — shorter, more contractions, lighter sign-offs.
-   - **External / first-contact:** the user's more formal email voice. Use
+   - **External / first-contact:** the user's more formal email voice — the
+     sub-register that triggers Step 1's `longform.md` supplement above. Use
      their *observed* formal register, not a generic business-email template.
    - Match greeting and sign-off to the user's actual inventory from
      `email.md` — never invent "Best regards" if they always write "thanks,".
@@ -73,15 +86,13 @@ first contact vs. ongoing back-and-forth.
    their hedging level. Most people's emails are shorter than an LLM's default
    — respect that.
 
-5. **Craft pass — only for long, external, formal email.** Short or internal
-   mail skips it. When it applies, use the craft rules bundled in voice-doc
-   (read `voice-doc/references/strunk-rules.md` if present), honoring the
-   longform Strunk-exemption list. Routine email does not get Strunk-edited —
-   it would make it sound stiffer than the user.
-
-6. **Fidelity check** against `email.md`: length, sign-off, greeting, hedging,
-   no assistant-register leakage (no "I hope this email finds you well", no
-   reflexive bulleting, no over-formal closers).
+5. **Fidelity check.** No craft pass runs on email, at any formality or
+   length — voice-profile's fidelity procedure (step 4) doesn't authorize one
+   for this register, and none of the craft-layer bundles
+   (`strunk-rules.md`) live in this skill. Check the draft against `email.md`:
+   length, sign-off, greeting, hedging, no assistant-register leakage (no "I
+   hope this email finds you well", no reflexive bulleting, no over-formal
+   closers).
 
 ## Delivery and sending
 
