@@ -21,3 +21,6 @@ jobs:
 
       - name: Run fallback-sample-count guard
         run: bash scripts/check-fallback-sample-count.sh
+
+      - name: Run ai-tells-single-source guard
+        run: bash scripts/check-ai-tells-single-source.sh

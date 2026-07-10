@@ -5,14 +5,18 @@ description: >
   proposals, design docs, blog posts, READMEs, announcements, or any
   multi-paragraph writing meant for other humans to read. Use this skill
   whenever the user asks to "write a doc," "draft a memo," "write this up,"
-  "turn these notes into a document," "draft a proposal," "write a post," or
-  makes any request for substantial prose — even if they never mention voice or
-  style, since sounding like themselves is the default expectation. Also
+  "turn these notes into a document," "draft a proposal," or makes any
+  request for substantial prose — even if they never mention voice or style,
+  since sounding like themselves is the default expectation. Also
   trigger on "write it like I would" or "make it sound like me" for new
   long-form content. This skill drafts new documents — it does not rewrite
-  existing text (use voice-rewrite), draft emails (use voice-email), write
-  chat/Slack messages (use voice-chat), or build the voice profile itself (use
-  voice-harvest).
+  existing text (use voice-rewrite), draft emails (use voice-email), or write
+  chat/Slack messages, short social-media posts, or tweets (use voice-chat —
+  even a "write a post" ask that's actually for Slack or a social platform
+  belongs there, not here, since that's chat physics); it does not build the
+  voice profile itself (use voice-harvest). Commit messages and PR
+  descriptions are out of scope pending issue #8 — no generator in this suite
+  has a harvested register for dev-prose yet.
 ---
 
 # Voice Doc

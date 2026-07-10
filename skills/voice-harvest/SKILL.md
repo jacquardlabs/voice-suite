@@ -77,10 +77,11 @@ Sources are reached through deferred tools — search for them before use:
 
 - **Claude chats:** `conversation_search` and `recent_chats`. The
   zero-connector baseline; attempt these first.
-- **Gmail / Slack / Notion / Drive:** call `tool_search` to load connectors if
-  the user approved them. If a requested source isn't connected, say so and
-  tell the user they can enable it in the connectors menu; proceed with what's
-  available.
+- **Gmail / Slack / Notion / Drive:** use the platform's deferred-tool search
+  (`tool_search` / `ToolSearch` in Claude Code; the equivalent mechanism on
+  other Claude surfaces) to load connectors if the user approved them. If a
+  requested source isn't connected, say so and tell the user they can enable
+  it in the connectors menu; proceed with what's available.
 
 **If `conversation_search` / `recent_chats` are unavailable** (tools not found
 in the registry), use the relay prompt fallback below instead of silently
@@ -89,97 +90,20 @@ failing or asking for manual pastes.
 ## Relay prompt fallback
 
 When Claude chat history tools are unavailable — common in Claude Code sessions
-that lack the chat-search connector — give the user this prompt to run in a
-Claude surface that *does* have history access (Claude Desktop, claude.ai web).
-They paste the response back; treat it as pre-filtered source material and
-proceed from the Synthesis step.
+that lack the chat-search connector — give the user the prompt in
+`references/relay-prompt.md` to run in a Claude surface that *does* have
+history access (Claude Desktop, claude.ai web). They paste the response back;
+treat it as pre-filtered source material and proceed from the Synthesis step.
 
 Deliver the prompt in a fenced code block so the user can copy it cleanly.
-It embeds its own literal copy of the confidence-tier table below because
-the Claude surface running it has no access to this skill's files and can't
-reference `_format.md` directly — if `_format.md`'s Coverage table ever
-changes, update this copy and the Synthesis step's citation further below
-along with it:
-
-````
-Search my Claude conversation history using conversation_search and
-recent_chats. I want to extract my authentic writing voice for a voice profile.
-Follow these rules exactly:
-
-**Source:** My user turns only — never assistant turns. Within my user turns,
-skip any block that looks pasted rather than typed (a long, polished passage
-inside an otherwise terse message is pasted content — length + register
-discontinuity within a single turn is the tell).
-
-**LLM-content filter (two passes):**
-Pass 1 — build a trusted baseline from my oldest and most casual messages:
-short replies, typo'd messages, quick reactions. Extract their stylometry:
-typo/disfluency rate, sentence-length mean and variance, lexicon, punctuation
-habits.
-Pass 2 — score everything else against that baseline. Exclude samples with:
-zero typos when my baseline has them, collapsed sentence-length variance,
-vocabulary spikes (delve, leverage, streamline, "I hope this finds you well"),
-bullet-heavy structure where my baseline is prose, or close match to a nearby
-assistant turn.
-
-**Bucket surviving samples into three registers:**
-- Longform — multi-paragraph explanations, technical writeups, detailed
-  descriptions
-- Email — correspondence-register messages
-- Chat — short replies, quick questions, reactions
-
-**Confidence tiers (compute, don't pick):** count the samples surviving
-filtering for this register and look up the tier below — never assert a
-tier without a count.
-
-| Register | High | Medium | Low |
-|---|---|---|---|
-| Chat | ≥100 messages | ≥30 messages | <30 messages |
-| Email | ≥40 sent messages | ≥15 sent messages | <15 sent messages |
-| Longform | ≥8 pieces | ≥3 pieces | <3 pieces |
-
-Below medium: emit a trait only where at least 3 independent samples agree
-on it, and never emit a Strunk exemption.
-
-**Output this structure for each register:**
-
----
-REGISTER: [longform / email / chat]
-
-## Traits
-[Quantified: sentence length mean + range, paragraph length, hedging level +
-specific hedge words, formality level, signature lexicon words, never-words,
-punctuation tics (em-dashes, ellipses, semicolons, parentheses), formatting
-habits (prose vs bullets vs headers), structural habits (how I open, close,
-transition)]
-
-## Exemplars
-[4–8 verbatim passages I actually wrote in this register, scrubbed of
-names/numbers/identifying details. Span the range — include a terse one, a
-careful one, a longer one.]
-
-## Anti-patterns
-[Never-does list: specific constructions, words, or formatting I demonstrably
-avoid]
-
-## Strunk exemptions
-[Longform only: Strunk's Elements of Style rules I consistently break as part
-of my voice. Format: "Rule N (name) — exempt: [one-line reason]". Only
-consistent violations, not one-offs.]
-
-## Coverage
-- Sample count: [N messages]
-- Date range: [earliest – latest]
-- Confidence: [tier from the table above, with count] — [one-line basis],
-  e.g. "medium (45 messages) — mostly DMs, few group threads"
-- Gaps: [what's thin or unrepresented]
----
-
-Also produce a GLOBAL TRAITS section — characteristics that hold across all
-registers.
-
-Output all four sections (Global + three registers) in sequence.
-````
+`references/relay-prompt.md` carries its own literal copy of the
+confidence-tier table and the vocabulary-spike examples, because the Claude
+surface running the prompt has no access to this skill's files and can't
+reference `_format.md` or `ai-tells.md` directly — that duplication is
+deliberate, not drift; see the note in `relay-prompt.md` itself. If
+`_format.md`'s Coverage table or `ai-tells.md`'s Vocabulary category ever
+change, update `relay-prompt.md`'s copies and the Synthesis step's citation
+further below along with them.
 
 **After the user pastes the response back:**
 
@@ -232,10 +156,12 @@ mean and variance, lexicon, punctuation habits.
   pasted a Claude draft back), or a sent email matches a Claude output from the
   same period (cross-source echo).
 - **Stylometric discontinuity:** typo rate drops to zero; sentence-length
-  variance collapses; suddenly perfect parallelism; vocabulary spikes
-  ("delve", "leverage", "streamline", "I hope this finds you well").
+  variance collapses; suddenly perfect parallelism; or a vocabulary spike into
+  `voice-profile/references/ai-tells.md`'s Vocabulary category.
 - **Structural tells:** bullet-heavy email from a prose-baseline writer;
-  bolded triads; sign-offs that never appear in trusted samples.
+  sign-offs that never appear in trusted samples; or any Structure-category
+  tell from the same `ai-tells.md` showing up against a baseline that
+  doesn't have it.
 
 **Policy:** ambiguous → exclude or queue for user review. A false exclude costs
 one sample; a false include poisons the voice.
@@ -261,8 +187,8 @@ samples and look up the tier against `_format.md`'s Coverage table —
 canonical there: chat ≥100/≥30 messages, email ≥40/≥15 sent messages,
 longform ≥8/≥3 pieces for high/medium respectively, below that low. (Cited
 here as numbers, not restated as a second table, so this copy and
-`_format.md`'s can't silently drift apart from each other — the relay
-prompt fallback earlier in this file carries the one other, necessarily
+`_format.md`'s can't silently drift apart from each other —
+`references/relay-prompt.md` carries the one other, necessarily
 self-contained copy; see the note there.)
 
 Report the tier *with* its count together, e.g. "medium (45 messages)",

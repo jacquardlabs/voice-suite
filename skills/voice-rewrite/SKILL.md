@@ -3,9 +3,10 @@ name: voice-rewrite
 description: >
   Rewrite existing text so it sounds like the user wrote it. Use this skill
   whenever the user hands you text and asks to "make this sound like me,"
-  "rewrite this in my voice," "de-AI this," "fix the tone," "make this less
-  robotic," "humanize this," or "put this in my words." Also trigger when they
-  paste an AI-generated draft and want it to read as their own. This skill
+  "rewrite this in my voice," "de-AI this," "fix the tone so it sounds like
+  me," "make this less robotic," "humanize this," or "put this in my words."
+  Also trigger when they paste an AI-generated draft and want it to read as
+  their own. This skill
   transforms text the user provides — to draft NEW content from scratch use
   voice-doc / voice-email / voice-chat; to build the voice profile use
   voice-harvest.
@@ -64,9 +65,9 @@ Strunk" — those are different targets and only the first one is the job.
    for a persistent profile.
 
 3. **Diagnose the input.** Identify what makes it *not* sound like the user:
-   - Assistant-register tells: uniform paragraph lengths, bolded triads,
-     reflexive bullets, "delve/leverage/streamline", "I hope this finds you
-     well", hedge-free over-confidence or its opposite.
+   - Assistant-register tells: the canonical Vocabulary/Structure/Register
+     list lives in `voice-profile/references/ai-tells.md` — check the input
+     against it rather than a shorter list here.
    - Mismatches against the profile: wrong sentence rhythm, wrong formality,
      missing signature lexicon, wrong hedging level.
 

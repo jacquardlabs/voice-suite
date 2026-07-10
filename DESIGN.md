@@ -16,18 +16,18 @@ Not applicable to this surface. Claude Skills are markdown instructions consumed
 
 ## Vocabulary
 
-The product's concepts are named consistently at the top level (skill names, register names) but the **AI-tells / anti-leakage vocabulary is duplicated across four independent lists** rather than sourced from one place — this is the vocabulary layer's main finding.
+The product's concepts are named consistently at the top level (skill names, register names), and the **AI-tells / anti-leakage vocabulary** — previously duplicated across four independent, drifting lists — now sources from one canonical file (see below).
 
 | Concept | Canonical display | Source of truth | Consumers |
 |---------|-------------------|-----------------|-----------|
 | Register names | `longform`, `email`, `chat` | `skills/voice-profile/references/_format.md` (defines the 3 register files) | voice-harvest (writes), voice-doc/voice-email/voice-chat (read their own register), voice-tune (patches) |
 | Register file section headings | `## Traits`, `## Exemplars`, `## Anti-patterns`, `## Strunk exemptions` (longform only), `## Coverage` | `skills/voice-profile/references/_format.md:1-59` — "Keep the section headings stable — the generators key off them" | voice-harvest, voice-tune, all 4 generators |
 | Confidence tier | `high` / `medium` / `low` | `_format.md:57`, restated ad hoc in each generator's fallback logic | voice-doc, voice-email, voice-chat, voice-rewrite |
-| **AI-tells / anti-leakage list** | *(no canonical form — see below)* | **No single source.** Four independent, overlapping-but-non-identical lists | voice-profile (SKILL.md:85-95, "Anti-leakage checklist"), voice-doc (SKILL.md:105-107), voice-rewrite (SKILL.md:37-40), voice-harvest (SKILL.md:186-189, "stylometric discontinuity" signals) |
+| **AI-tells / anti-leakage list** | Vocabulary / Structure / Register categories | `skills/voice-profile/references/ai-tells.md` — the one canonical file, added by issue #7's consolidation (`routing-tells-consolidation`) | voice-profile (fidelity procedure step 5, Anti-leakage checklist), voice-rewrite (Diagnose step), voice-harvest (Pass 2 exclusion signals) — voice-doc already pointed at voice-profile's fidelity procedure before this consolidation (a side effect of `fidelity-consistency`'s dedup) and restates no vocabulary of its own |
 
-**The AI-tells drift, concretely:** all four independently list "delve/leverage/streamline" and "I hope this finds you well" / "I hope this helps," but only voice-profile and voice-doc mention "triads" ("clear, concise, and compelling"); only voice-harvest frames it as *exclusion signals during harvest* (echo match, stylometric discontinuity, structural tells) rather than a delivery-time checklist; only voice-rewrite frames "hedge-free over-confidence or its opposite" as a tell. This is exactly issue #7's finding #5 — tracked there as "AI-tells list scattered and stale," proposing consolidation into one `references/ai-tells.md`.
+**Resolved by the `routing-tells-consolidation` story (issue #7):** the four independent, overlapping-but-not-identical lists that used to live in voice-profile, voice-doc, voice-rewrite, and voice-harvest (three restated in full; voice-doc already a bare pointer) now converge on `skills/voice-profile/references/ai-tells.md` as the one full-text detector — every consumer names it by reference instead of restating it. voice-harvest still frames its own read of that file as *exclusion signals during harvest* (echo match, stylometric discontinuity, structural tells) rather than a delivery-time checklist; that's a legitimate difference in framing, not drift, since the underlying vocabulary is now the same file either way. The one deliberate exception is voice-harvest's embedded relay prompt (`skills/voice-harvest/references/relay-prompt.md`): it runs on a Claude surface with no file access to this skill's `references/`, so it carries its own necessarily self-contained copy of the vocabulary examples.
 
-*(High confidence — read directly from all four files; line numbers cited above.)*
+*(High confidence — read directly from the consolidated file and its pointer-consumers.)*
 
 ## Formatting
 
@@ -54,4 +54,12 @@ The product's concepts are named consistently at the top level (skill names, reg
 
 ## Anti-patterns (do NOT do these)
 
-<!-- FILL IN based on intent: is a 5th AI-tells list (e.g. adding one to a future skill) an anti-pattern to flag here, pending issue #7's consolidation? Is hardcoding a claude.ai-only path (issue #5) an anti-pattern worth naming explicitly so it doesn't recur in a future skill? -->
+- **Don't restate the AI-tells vocabulary in a new list.** Any skill that
+  needs to check for assistant-register leakage points at
+  `skills/voice-profile/references/ai-tells.md` — the one canonical
+  Vocabulary/Structure/Register detector (see Vocabulary, above) — rather
+  than hand-rolling its own copy. A 5th list anywhere in the repo would be
+  the exact failure this file already documents happening once (four
+  independent lists, drifted), not a new one.
+
+<!-- FILL IN: is hardcoding a claude.ai-only path (issue #5) an anti-pattern worth naming explicitly too? Out of this story's scope — issue #5's path-resolution dedup landed via profile-durability/fidelity-consistency and is enforced by scripts/check-canonical-resolution-string.sh, but that enforcement is implicit (a guard script) rather than a stated anti-pattern here. Left for a future review to decide whether it's worth calling out explicitly in this section too. -->

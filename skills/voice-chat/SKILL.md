@@ -2,13 +2,16 @@
 name: voice-chat
 description: >
   Draft short-form messages in the user's voice — Slack messages, DMs, texts,
-  quick replies, channel posts. Use this skill when the user asks to "draft a
-  Slack message," "reply to this DM," "what should I text them," "send a quick
-  note to the channel," or hands you a short-form thread to answer. This skill
-  handles chat-register specifically — for email use voice-email, for long-form
-  docs use voice-doc, to rewrite existing text use voice-rewrite. Chat register
-  has its own physics (fragments, lowercase, emoji, brevity) and must never be
-  Strunk-edited.
+  quick replies, channel posts, and short social-media posts or replies
+  (tweets and the like). Use this skill when the user asks to "draft a Slack
+  message," "reply to this DM," "what should I text them," "send a quick note
+  to the channel," "write a post" for a chat or social surface, or hands you a
+  short-form thread to answer. This skill handles chat-register specifically
+  — for email use voice-email, for long-form docs or blog posts use
+  voice-doc, to rewrite existing text use voice-rewrite. Chat register has
+  its own physics (fragments, lowercase, emoji, brevity) and must never be
+  Strunk-edited — a short social post gets this register too, never
+  voice-doc's long-form craft pass.
 ---
 
 # Voice Chat

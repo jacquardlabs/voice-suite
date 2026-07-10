@@ -118,8 +118,9 @@ they load and whether the craft layer applies.
 5. **Fidelity self-check.** Before delivering, verify against the register
    file: sentence-length distribution, signature lexicon present, never-words
    absent, hedging/formality at observed level, formatting habits respected,
-   and **no assistant-register leakage** (stock LLM phrasing, uniform
-   paragraphs, reflexive bullets/bolded triads, "delve/leverage/streamline").
+   and **no assistant-register leakage** — check the draft against
+   `references/ai-tells.md` (the canonical Vocabulary/Structure/Register
+   detector) and the Anti-leakage checklist below.
 
 6. **Disclose low confidence.** If the register file marks low coverage, say
    so on delivery and note that corrections fed back through voice-tune will
@@ -128,14 +129,19 @@ they load and whether the craft layer applies.
 ## Anti-leakage checklist
 
 The single most common failure is the user's voice getting overwritten by the
-assistant's defaults. Concrete tells to scan for before delivering:
+assistant's defaults. The full tells list to scan for before delivering lives
+in one place — `references/ai-tells.md` — rather than restated here; read it
+before this check rather than relying on memory of a shorter list.
 
-- Paragraphs all within a few words of the same length (real writers vary).
-- A bulleted list or bolded lead-in where the user would have written prose.
-- Triads ("clear, concise, and compelling") the user never uses.
-- Opener/closer formulas ("I hope this helps", "Great question", "In
-  conclusion") absent from their exemplars.
-- Hedging *added* to a user who is blunt, or *stripped* from a user who hedges.
+**The profile's observed traits always win over that generic list.** Every
+entry in `ai-tells.md` is a *generic* AI tell, and the profile overrides it
+when the two conflict. Em-dash density is the concrete case:
+`ai-tells.md` flags dense em-dash use as a tell, but a profile that documents
+em-dashes as this user's own habit (in `global.md` or a register file's
+Traits) is not exhibiting an AI tell by using them — the observed trait wins.
+The same precedent already holds for hedging: hedging *added* to a user who
+is blunt, or *stripped* from a user who hedges, is the leak; hedging at the
+user's own observed level, however heavy or light, is not.
 
 ## Important
 
