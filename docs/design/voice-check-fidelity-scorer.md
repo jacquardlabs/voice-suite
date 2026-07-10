@@ -1,9 +1,10 @@
 # Design: voice-check — standalone fidelity scorer
 
 Story slug `voice-check-fidelity-scorer`, epic `audit-fixes`. Source: issue
-#9 (out-of-band proposal, judge score 7/10, screened but not previously
-product-gated — this design is that gate). This design covers only this
-story's acceptance criteria: a new skill that scores arbitrary pasted text
+#9, one of the two small additions (`voice-card-export` and this story) the
+epic goal commits to shipping once their prerequisites land. This design
+covers only this story's acceptance criteria: a new skill that scores
+arbitrary pasted text
 against the installed profile, using `references/ai-tells.md` rather than a
 re-derived list, that returns a per-trait deviation report and hands off to
 voice-rewrite. It does not reopen profile durability (issue #4), path-
@@ -51,13 +52,14 @@ pause... answered with quantified traits instead of a feeling."
 **A new, read-only, ninth skill: `voice-check`.** Naming matches the
 one-word sibling convention (`voice-doc`, `voice-email`, `voice-chat`,
 `voice-rewrite`, `voice-harvest`, `voice-tune`, `voice-card`, `voice-profile`)
-that DESIGN.md's Per-surface-conventions section already documents and
-already refers to this proposed skill by (`voice-check`, alongside
-`voice-card-export`, in `routing-tells-consolidation`'s design doc). The
-story/issue name stays `voice-check-fidelity-scorer`; the skill itself is
-`/voice-check`, triggered by natural language too ("does this sound like
-me," "check this against my voice," "score this text," "did an AI write
-this").
+that DESIGN.md's Per-surface-conventions section already documents. The
+name itself, `voice-check`, is already the one in use elsewhere in this
+epic — `routing-tells-consolidation`'s design doc names it directly
+("`voice-card-export` (#10) and `voice-check` (#9)"), and it matches this
+story's own ledger metadata. The story/issue name stays
+`voice-check-fidelity-scorer`; the skill itself is `/voice-check`,
+triggered by natural language too ("does this sound like me," "check this
+against my voice," "score this text," "did an AI write this").
 
 **What changes for the user:** they can hand the suite *any* text — not
 just a suite-drafted one — and ask whether it sounds like them, and get
