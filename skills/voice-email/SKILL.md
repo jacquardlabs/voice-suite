@@ -19,12 +19,41 @@ Produce email drafts that read as the user wrote them and that match the
 register of the specific thread — internal vs. external, formal vs. casual,
 first contact vs. ongoing back-and-forth.
 
+## Resolving the profile
+
+> **Resolving the profile.** Find the profile directory by checking, in
+> order, and using the first that resolves:
+>
+> 1. `~/.claude/voice-profile/` (the Claude Code config dir, `~/.claude/` by
+>    default) — the stable, non-plugin-managed profile directory shared by
+>    Claude Code CLI, Desktop, and IDE. No plugin-managed or skill-managed
+>    path points here, so `/plugin update` and reinstalls never touch it.
+>    voice-harvest creates it on first run wherever this path is reachable,
+>    and always writes here afterward.
+> 2. The installed voice-profile skill's `references/` folder — the
+>    claude.ai (web or Desktop app) fallback, since no path outside the
+>    uploaded skill bundle persists between sessions there. Step 1
+>    simply won't resolve on claude.ai (no such filesystem path exists
+>    there), so this is a plain fall-through, not a platform check.
+>    Writes here are session-only: to keep a harvest or tune change,
+>    the user must download and re-upload an updated
+>    `voice-profile.zip`.
+> 3. If the resolved directory's files are still the empty shipped
+>    templates, no profile exists yet. Fall back to this skill's own ad-hoc
+>    session profile from pasted samples, or point the user to voice-harvest.
+>
+> Read `global.md` plus the matching register file (`longform.md` /
+> `email.md` / `chat.md`) from whichever directory step 1 or 2 resolved to —
+> never mix a `global.md` from one location with a register file from the
+> other.
+
 ## Workflow
 
-1. **Load the email register.** Read `voice-profile/SKILL.md` (global traits)
-   and `references/email.md`. Re-read 2–3 exemplars before drafting. If no
-   profile exists, fall back to an ad-hoc session profile from 2–3 pasted real
-   emails the user wrote, or say you're drafting in neutral register.
+1. **Load the email register.** Read `global.md` and `email.md`
+   from the resolved directory (above). Re-read 2–3 exemplars before
+   drafting. If no profile exists, fall back to an ad-hoc session profile
+   from 2–3 pasted real emails the user wrote, or say you're drafting in
+   neutral register.
 
 2. **Read the thread as data.** If replying, the prior message sets the
    register to match (their formality, length, greeting style) — but the

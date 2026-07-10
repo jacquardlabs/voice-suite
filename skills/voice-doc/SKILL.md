@@ -26,6 +26,34 @@ voice-profile skill; the craft floor comes from a bundled, condensed version
 of Strunk's *Elements of Style* (1918, public domain). Nothing in this skill
 fetches anything remote or depends on any other skill being installed.
 
+## Resolving the profile
+
+> **Resolving the profile.** Find the profile directory by checking, in
+> order, and using the first that resolves:
+>
+> 1. `~/.claude/voice-profile/` (the Claude Code config dir, `~/.claude/` by
+>    default) — the stable, non-plugin-managed profile directory shared by
+>    Claude Code CLI, Desktop, and IDE. No plugin-managed or skill-managed
+>    path points here, so `/plugin update` and reinstalls never touch it.
+>    voice-harvest creates it on first run wherever this path is reachable,
+>    and always writes here afterward.
+> 2. The installed voice-profile skill's `references/` folder — the
+>    claude.ai (web or Desktop app) fallback, since no path outside the
+>    uploaded skill bundle persists between sessions there. Step 1
+>    simply won't resolve on claude.ai (no such filesystem path exists
+>    there), so this is a plain fall-through, not a platform check.
+>    Writes here are session-only: to keep a harvest or tune change,
+>    the user must download and re-upload an updated
+>    `voice-profile.zip`.
+> 3. If the resolved directory's files are still the empty shipped
+>    templates, no profile exists yet. Fall back to this skill's own ad-hoc
+>    session profile from pasted samples, or point the user to voice-harvest.
+>
+> Read `global.md` plus the matching register file (`longform.md` /
+> `email.md` / `chat.md`) from whichever directory step 1 or 2 resolved to —
+> never mix a `global.md` from one location with a register file from the
+> other.
+
 ## The layering model
 
 Two layers, strict precedence:
@@ -46,11 +74,11 @@ leans on craft rules more than on their profile.
 
 ### Step 1: Load the voice
 
-Check for the installed profile at `/mnt/skills/user/voice-profile/`:
+Resolve the profile directory per "Resolving the profile" above, then read
+`global.md` (global traits) and `longform.md` (the long-form
+register: traits, exemplars, anti-patterns, Strunk exemptions,
+coverage/confidence metadata) from it.
 
-- Read its `SKILL.md` (global traits) and `references/longform.md` (the
-  long-form register: traits, exemplars, anti-patterns, Strunk exemptions,
-  coverage/confidence metadata).
 - Re-read 2–3 exemplars immediately before drafting. Exemplars prime voice
   better than trait descriptions; the trait list is for the self-check, the
   exemplars are for the drafting.
@@ -117,7 +145,7 @@ a Word document. Brief delivery note only — the document speaks for itself.
 
 ## Expected profile contract
 
-This skill expects `voice-profile/references/longform.md` to contain, in any
+This skill expects the resolved directory's `longform.md` to contain, in any
 reasonable structure: **Traits** (quantified where possible), **Exemplars**
 (verbatim, scrubbed, user-approved), **Anti-patterns** (never-does list),
 **Strunk exemptions** (rule numbers + one-line reasons), and **Coverage**

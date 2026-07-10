@@ -1,0 +1,20 @@
+name: Check canonical strings
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  canonical-resolution-string:
+    name: Resolving-the-profile block is byte-identical
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run guard
+        run: bash scripts/check-canonical-resolution-string.sh
+
+      - name: Run flat-register-read guard
+        run: bash scripts/check-flat-register-reads.sh
