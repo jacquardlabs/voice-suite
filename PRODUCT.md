@@ -2,7 +2,7 @@
 
 ## Why this product exists
 
-Voice Suite is seven Claude Skills that mine text a user actually wrote, distill it into a structured voice profile, and generate new prose — docs, emails, chat messages, rewrites — in that same voice (README.md:1-3). The problem it targets: AI-drafted writing defaults to a generic, detectably-AI register (README.md:139, "not well-edited text, not generically-human text"); this product's bet is that a user's own writing, mined and quantified, is a better ground truth than any generic style guide. The design rules make this explicit: "Profile over everything… If a profile trait makes prose 'worse' by Strunk's lights, the trait wins" (README.md:139).
+Voice Suite is eight Claude Skills that mine text a user actually wrote, distill it into a structured voice profile, and generate new prose — docs, emails, chat messages, rewrites — in that same voice (README.md:1-3). The problem it targets: AI-drafted writing defaults to a generic, detectably-AI register (README.md:139, "not well-edited text, not generically-human text"); this product's bet is that a user's own writing, mined and quantified, is a better ground truth than any generic style guide. The design rules make this explicit: "Profile over everything… If a profile trait makes prose 'worse' by Strunk's lights, the trait wins" (README.md:139).
 
 *(High confidence — stated directly in README.md.)*
 
@@ -37,7 +37,7 @@ Frustration this addresses: AI drafts get edited into a "human" voice manually, 
 
 Issue tracker: [GitHub Issues](https://github.com/jacquardlabs/voice-suite/issues)
 
-The tracker owns individual features and fixes. The seven skills themselves are the stable capability surface:
+The tracker owns individual features and fixes. The eight skills themselves are the stable capability surface:
 
 | Skill | Role |
 |---|---|
@@ -48,8 +48,9 @@ The tracker owns individual features and fixes. The seven skills themselves are 
 | `voice-chat` | Generates short-form messages (Slack, DM, text) |
 | `voice-rewrite` | Rewrites existing text into the user's voice |
 | `voice-tune` | Learns from user edits to generated drafts; patches the profile after a repeated pattern, with confirmation |
+| `voice-card` | Compiles the installed profile into a portable ~300-word prompt block for other AI surfaces |
 
-All seven are shipped (README.md:155, "All 7 drafted").
+All eight are shipped (README.md:185, "All 8 drafted").
 
 *(High confidence — README.md status table, cross-checked against `skills/` directory contents.)*
 

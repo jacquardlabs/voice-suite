@@ -7,7 +7,7 @@
 
 ### Code conventions
 
-This repo has no application source — it is 7 Claude Skills (`skills/*/SKILL.md` + `references/`), a plugin manifest, and release tooling. There is no language to lint (`pyproject.toml` only configures `python-semantic-release`; no Python/JS/TS source exists).
+This repo has no application source — it is 8 Claude Skills (`skills/*/SKILL.md` + `references/`), a plugin manifest, and release tooling. There is no language to lint (`pyproject.toml` only configures `python-semantic-release`; no Python/JS/TS source exists).
 
 - **Skills/prompts** — Markdown SKILL.md files with `name` + `description` YAML frontmatter only (no `allowed-tools` or other fields, by convention — see DESIGN.md). When editing anything under `skills/`, use the `writing-skills` meta-skill first.
 - **Linter** — none; there is no source to lint. `/gate-audit`'s code-quality and docs checks apply to prompt clarity and cross-skill consistency instead of language idiom.
