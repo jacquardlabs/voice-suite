@@ -24,3 +24,6 @@ jobs:
 
       - name: Run ai-tells-single-source guard
         run: bash scripts/check-ai-tells-single-source.sh
+
+      - name: Run no-email-craft-pass guard
+        run: bash scripts/check-no-email-craft-pass.sh

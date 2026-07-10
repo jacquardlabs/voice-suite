@@ -82,8 +82,11 @@ Strunk" — those are different targets and only the first one is the job.
 
 5. **Craft pass — scale-gated.** For doc-scale rewrites, run the craft pass
    against `references/strunk-rules.md` (bundled here), honoring the longform
-   Strunk-exemption list — profile traits win. Email-scale: only if long and
-   formal. Chat-scale: never.
+   Strunk-exemption list — profile traits win. Email-scale and chat-scale:
+   never, regardless of formality or length — matching voice-email (no craft
+   pass runs on email, at any formality or length) and voice-chat, and the
+   canonical fidelity procedure and `_format.md`'s contract, neither of which
+   authorize one for email.
 
 6. **Fidelity check** against the register file, with the anti-leakage
    checklist front of mind — the whole point of a rewrite is that *none* of
