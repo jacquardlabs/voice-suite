@@ -56,7 +56,11 @@ Honesty metadata the generators use to calibrate and disclose:
 - **Date range:** earliest–latest (flags pre-AI vs. current voice).
 - **Confidence:** a computed tier, never an asserted label — look up the
   sample count against the register's threshold below and report tier
-  *with* count together, e.g. "medium (22 messages)":
+  *with* count together, e.g. "medium (22 messages)". The tier is a pure
+  function of that count and nothing else moves it directly: a tune-derived
+  correction patches the trait or anti-pattern it corrects, not this tier —
+  the tier only changes when the register's underlying sample count does
+  (e.g., a refresh harvest adding samples):
 
   | Register | High | Medium | Low |
   |---|---|---|---|
@@ -80,10 +84,14 @@ that look like a voice trait but haven't been seen enough times to trust.
 
 - One line per observation: what was observed, when, and an occurrence
   count that increments on repeat sightings.
-- **Generators ignore this section entirely.** It is write-side bookkeeping
-  between successive harvest/tune-style passes, not draft-time signal — the
-  fidelity procedure and every generation skill read Traits/Exemplars/
-  Anti-patterns/Coverage only.
+- **Generators do not read this section.** It is write-side bookkeeping
+  between successive harvest/tune-style passes, not draft-time signal. That
+  holds today by construction, not by an enforced read-path exclusion: this
+  section ships with no producer writing to it yet (see below) and no
+  generation skill's read path has been updated to reference it. A future
+  story that wires a producer into this section must also confirm the
+  shared fidelity procedure keeps scoping its reads to Traits/Exemplars/
+  Anti-patterns/Coverage rather than picking this section up incidentally.
 - **Promotion rule:** a 2nd occurrence makes it a real candidate; a 3rd
   occurrence promotes it into Traits or Anti-patterns (whichever it
   describes) and removes it from this list. An explicit user confirmation
@@ -123,5 +131,8 @@ that look like a voice trait but haven't been seen enough times to trust.
 - Gaps: few work-channel (vs. DM) samples.
 
 ## Pending observations
-- 2026-06-30: opens replies with "quick note —" (seen 2x, not yet promoted).
+- 2026-06-30: opens replies with a quick scene-setter — "quick note —",
+  "quick thing —" (seen 2x, wording varies; holds for a 3rd occurrence
+  before promoting, per the substance-not-wording branch of the rule
+  above).
 ```

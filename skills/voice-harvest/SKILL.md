@@ -66,7 +66,12 @@ Claude surface that *does* have history access (Claude Desktop, claude.ai web).
 They paste the response back; treat it as pre-filtered source material and
 proceed from the Synthesis step.
 
-Deliver the prompt in a fenced code block so the user can copy it cleanly:
+Deliver the prompt in a fenced code block so the user can copy it cleanly.
+It embeds its own literal copy of the confidence-tier table below because
+the Claude surface running it has no access to this skill's files and can't
+reference `_format.md` directly — if `_format.md`'s Coverage table ever
+changes, update this copy and the Synthesis step's citation further below
+along with it:
 
 ````
 Search my Claude conversation history using conversation_search and
@@ -221,14 +226,13 @@ Traits, 3–8 scrubbed Exemplars spanning the range, the Anti-pattern list, and
 Coverage metadata (count, date range, confidence, gaps).
 
 **Confidence is computed, not picked.** Count the register's surviving
-samples and look up the tier against `_format.md`'s Coverage table
-(canonical; mirrored here so this step doesn't need a second lookup):
-
-| Register | High | Medium | Low |
-|---|---|---|---|
-| Chat | ≥100 messages | ≥30 messages | <30 messages |
-| Email | ≥40 sent messages | ≥15 sent messages | <15 sent messages |
-| Longform | ≥8 pieces | ≥3 pieces | <3 pieces |
+samples and look up the tier against `_format.md`'s Coverage table —
+canonical there: chat ≥100/≥30 messages, email ≥40/≥15 sent messages,
+longform ≥8/≥3 pieces for high/medium respectively, below that low. (Cited
+here as numbers, not restated as a second table, so this copy and
+`_format.md`'s can't silently drift apart from each other — the relay
+prompt fallback earlier in this file carries the one other, necessarily
+self-contained copy; see the note there.)
 
 Report the tier *with* its count together, e.g. "medium (22 messages)",
 never the tier alone. Below medium, apply `_format.md`'s two low-coverage
