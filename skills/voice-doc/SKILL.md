@@ -55,13 +55,14 @@ leans on craft rules more than on their profile.
 >    path points here, so `/plugin update` and reinstalls never touch it.
 >    voice-harvest creates it on first run wherever this path is reachable,
 >    and always writes here afterward.
-> 2. This skill's own installed `references/` folder — the claude.ai (web or
->    Desktop app) fallback, since no path outside the uploaded skill bundle
->    persists between sessions there. Step 1 simply won't resolve on
->    claude.ai (no such filesystem path exists there), so this is a plain
->    fall-through, not a platform check. Writes here are session-only: to
->    keep a harvest or tune change, the user must download and re-upload an
->    updated `voice-profile.zip`.
+> 2. The installed voice-profile skill's `references/` folder — the
+>    claude.ai (web or Desktop app) fallback, since no path outside the
+>    uploaded skill bundle persists between sessions there. Step 1
+>    simply won't resolve on claude.ai (no such filesystem path exists
+>    there), so this is a plain fall-through, not a platform check.
+>    Writes here are session-only: to keep a harvest or tune change,
+>    the user must download and re-upload an updated
+>    `voice-profile.zip`.
 > 3. If the resolved directory's files are still the empty shipped
 >    templates, no profile exists yet. Fall back to this skill's own ad-hoc
 >    session profile from pasted samples, or point the user to voice-harvest.
