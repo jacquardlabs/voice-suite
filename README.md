@@ -107,7 +107,7 @@ Describe what you need, or paste the text you want rewritten. The skill reads yo
 
 **3. Tune.** Paste your original draft and your revised version into Claude, then type `/voice-tune`. It extracts what changed (voice patterns only, not content changes), asks whether to make each change a standing rule, and patches the profile.
 
-On Claude web / Desktop: voice-tune identifies the changes but can't write back to the installed skill files directly — apply suggested edits by updating and re-uploading `voice-profile.zip`.
+On Claude web / Desktop: voice-tune writes the patch to the installed skill's files, but only for the current session — nothing persists between conversations on this surface (see "Where your profile data lives" below). To keep the change, download and re-upload an updated `voice-profile.zip`.
 
 ---
 

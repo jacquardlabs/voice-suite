@@ -26,25 +26,7 @@ voice-profile skill; the craft floor comes from a bundled, condensed version
 of Strunk's *Elements of Style* (1918, public domain). Nothing in this skill
 fetches anything remote or depends on any other skill being installed.
 
-## The layering model
-
-Two layers, strict precedence:
-
-1. **Voice layer (wins):** the profile's observed traits, exemplars,
-   anti-patterns, and Strunk exemptions. Descriptive — how this user actually
-   writes.
-2. **Craft layer (fills silence):** `references/strunk-rules.md`. Prescriptive
-   defaults for structure, grammar, and clarity. Applied fully where the
-   profile is silent or low-confidence, and *never* against an observed trait.
-
-Long-form is usually the register with the thinnest harvested data, so in
-practice the craft layer does the most work exactly where the voice signal is
-weakest. That's the design, not a bug — but always tell the user when a draft
-leans on craft rules more than on their profile.
-
-## Workflow
-
-### Step 1: Load the voice
+## Resolving the profile
 
 > **Resolving the profile.** Find the profile directory by checking, in
 > order, and using the first that resolves:
@@ -72,9 +54,30 @@ leans on craft rules more than on their profile.
 > never mix a `global.md` from one location with a register file from the
 > other.
 
-Read `global.md` (global traits) and `references/longform.md` (the long-form
+## The layering model
+
+Two layers, strict precedence:
+
+1. **Voice layer (wins):** the profile's observed traits, exemplars,
+   anti-patterns, and Strunk exemptions. Descriptive — how this user actually
+   writes.
+2. **Craft layer (fills silence):** `references/strunk-rules.md`. Prescriptive
+   defaults for structure, grammar, and clarity. Applied fully where the
+   profile is silent or low-confidence, and *never* against an observed trait.
+
+Long-form is usually the register with the thinnest harvested data, so in
+practice the craft layer does the most work exactly where the voice signal is
+weakest. That's the design, not a bug — but always tell the user when a draft
+leans on craft rules more than on their profile.
+
+## Workflow
+
+### Step 1: Load the voice
+
+Resolve the profile directory per "Resolving the profile" above, then read
+`global.md` (global traits) and `references/longform.md` (the long-form
 register: traits, exemplars, anti-patterns, Strunk exemptions,
-coverage/confidence metadata) from the resolved directory.
+coverage/confidence metadata) from it.
 
 - Re-read 2–3 exemplars immediately before drafting. Exemplars prime voice
   better than trait descriptions; the trait list is for the self-check, the

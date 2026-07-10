@@ -22,6 +22,34 @@ text or LLM-generated drafts produces an inauthentic "you." So this skill is
 deliberately conservative — **precision over recall.** When a sample is
 ambiguous, exclude it. There is almost always enough clean data to spare.
 
+## Resolving the profile
+
+> **Resolving the profile.** Find the profile directory by checking, in
+> order, and using the first that resolves:
+>
+> 1. `~/.claude/voice-profile/` (the Claude Code config dir, `~/.claude/` by
+>    default) — the stable, non-plugin-managed profile directory shared by
+>    Claude Code CLI, Desktop, and IDE. No plugin-managed or skill-managed
+>    path points here, so `/plugin update` and reinstalls never touch it.
+>    voice-harvest creates it on first run wherever this path is reachable,
+>    and always writes here afterward.
+> 2. The installed voice-profile skill's `references/` folder — the
+>    claude.ai (web or Desktop app) fallback, since no path outside the
+>    uploaded skill bundle persists between sessions there. Step 1
+>    simply won't resolve on claude.ai (no such filesystem path exists
+>    there), so this is a plain fall-through, not a platform check.
+>    Writes here are session-only: to keep a harvest or tune change,
+>    the user must download and re-upload an updated
+>    `voice-profile.zip`.
+> 3. If the resolved directory's files are still the empty shipped
+>    templates, no profile exists yet. Fall back to this skill's own ad-hoc
+>    session profile from pasted samples, or point the user to voice-harvest.
+>
+> Read `global.md` plus the matching register file (`longform.md` /
+> `email.md` / `chat.md`) from whichever directory step 1 or 2 resolved to —
+> never mix a `global.md` from one location with a register file from the
+> other.
+
 ## Consent and privacy first
 
 Before reading anything:
@@ -202,9 +230,12 @@ flag the drift in the profile's global Drift note.
 
 Bucket the surviving samples by register — **longform** (docs, long emails,
 posts), **email** (typical correspondence), **chat** (Slack/DM/text) — and for
-each, fill the contract in `voice-profile/references/_format.md`: quantified
-Traits, 3–8 scrubbed Exemplars spanning the range, the Anti-pattern list, and
-Coverage metadata (count, date range, confidence, gaps).
+each, fill the contract in the installed voice-profile skill's
+`references/_format.md` (this ships with the skill and is schema, not
+resolved profile data — like `SKILL.md`, it never moves to the resolved
+directory): quantified Traits, 3–8 scrubbed Exemplars spanning the range, the
+Anti-pattern list, and Coverage metadata (count, date range, confidence,
+gaps).
 
 **Longform also gets a Strunk-exemption list.** Score the user's authentic
 long-form samples against the bundled craft rules and emit, for each rule they
@@ -217,37 +248,11 @@ Also fill `global.md` from traits that hold across all three registers.
 
 ## Output
 
-After the exemplar approval gate, resolve the profile directory, then write
-the populated files there:
-
-> **Resolving the profile.** Find the profile directory by checking, in
-> order, and using the first that resolves:
->
-> 1. `~/.claude/voice-profile/` (the Claude Code config dir, `~/.claude/` by
->    default) — the stable, non-plugin-managed profile directory shared by
->    Claude Code CLI, Desktop, and IDE. No plugin-managed or skill-managed
->    path points here, so `/plugin update` and reinstalls never touch it.
->    voice-harvest creates it on first run wherever this path is reachable,
->    and always writes here afterward.
-> 2. The installed voice-profile skill's `references/` folder — the
->    claude.ai (web or Desktop app) fallback, since no path outside the
->    uploaded skill bundle persists between sessions there. Step 1
->    simply won't resolve on claude.ai (no such filesystem path exists
->    there), so this is a plain fall-through, not a platform check.
->    Writes here are session-only: to keep a harvest or tune change,
->    the user must download and re-upload an updated
->    `voice-profile.zip`.
-> 3. If the resolved directory's files are still the empty shipped
->    templates, no profile exists yet. Fall back to this skill's own ad-hoc
->    session profile from pasted samples, or point the user to voice-harvest.
->
-> Read `global.md` plus the matching register file (`longform.md` /
-> `email.md` / `chat.md`) from whichever directory step 1 or 2 resolved to —
-> never mix a `global.md` from one location with a register file from the
-> other.
+After the exemplar approval gate, resolve the profile directory per
+"Resolving the profile" above, then write the populated files there.
 
 If the directory from step 1 doesn't exist yet, create it — this is the
-"voice-harvest creates it on first run" case the string above names. Write:
+"voice-harvest creates it on first run" case that section names. Write:
 
 - `global.md`
 - `longform.md`
