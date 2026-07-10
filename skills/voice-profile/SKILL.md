@@ -68,13 +68,22 @@ voice-tune) quotes the block below byte-identical:
 
 ## The fidelity procedure (shared)
 
-Every generation skill (voice-doc, voice-email, voice-chat, voice-rewrite)
-runs this loop. They differ only in which register file they load and whether
-the craft layer applies.
+This is the one full-text copy of the shared draft-and-check loop. Every
+generation skill (voice-doc, voice-email, voice-chat, voice-rewrite) follows
+these six steps for its drafting workflow; a generator's own `SKILL.md` states
+only where it deviates — which register file it loads, whether the craft-pass
+step (4) applies to it, and any genuinely register-specific framing — never a
+restatement of the steps themselves. They differ only in which register file
+they load and whether the craft layer applies.
 
 1. **Pick the register.** Match the request to a reference file: longform,
    email, or chat. If the request spans registers (e.g., a doc with a short
-   intro email), handle each part in its own register.
+   intro email), handle each part in its own register. **If no profile is
+   installed**, don't block: ask for 2–4 samples of the user's own writing in
+   the relevant register (or offer a neutral/craft-only mode instead of
+   asking), extract a session-only ad-hoc profile from what they paste, and
+   mention that voice-harvest can build a persistent one. This fallback count
+   is the same regardless of which generation skill is asking.
 
 2. **Prime on exemplars, not descriptions.** Re-read 2–3 verbatim exemplars
    from the chosen register file immediately before drafting. Trait lists are

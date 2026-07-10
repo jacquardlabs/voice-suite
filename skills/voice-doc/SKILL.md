@@ -77,19 +77,16 @@ leans on craft rules more than on their profile.
 Resolve the profile directory per "Resolving the profile" above, then read
 `global.md` (global traits) and `longform.md` (the long-form
 register: traits, exemplars, anti-patterns, Strunk exemptions,
-coverage/confidence metadata) from it.
-
-- Re-read 2–3 exemplars immediately before drafting. Exemplars prime voice
-  better than trait descriptions; the trait list is for the self-check, the
-  exemplars are for the drafting.
+coverage/confidence metadata) from it. Follow voice-profile's fidelity
+procedure step 2 to prime on exemplars before drafting.
 
 **If no profile is installed**, don't block. Offer two modes and proceed with
-whichever the user picks:
+whichever the user picks, per the fidelity procedure's fallback (step 1):
 
-- **Ad-hoc profile:** ask them to paste 2–4 samples of their own writing
-  (docs or long emails they wrote, not AI-drafted). Extract a session-only
-  mini-profile: sentence rhythm, hedging, lexicon, formatting habits. Mention
-  that voice-harvest can build a persistent profile later.
+- **Ad-hoc profile:** ask for that many samples of their own writing — docs or
+  long emails they wrote, not AI-drafted. Extract a session-only mini-profile:
+  sentence rhythm, hedging, lexicon, formatting habits. Mention that
+  voice-harvest can build a persistent profile later.
 - **Neutral craft mode:** draft on the craft layer alone, clearly stated.
 
 ### Step 2: Scope the document
@@ -104,39 +101,15 @@ Read `references/strunk-rules.md` in full (it is small), including its
 precedence preamble. Note which voice-adjacent rules (10–15, 18) the profile's
 exemption list disables for this user.
 
-### Step 4: Draft in voice, from the first sentence
+### Steps 4–6: Draft, craft pass, fidelity check
 
-Draft voice-first. Do **not** write a neutral draft and translate it
-afterward — translation produces pastiche: the user's tics sprinkled over
-assistant-shaped prose. Sentence one should already be theirs: their typical
-opener, their paragraph length, their willingness (or refusal) to use
-headers and bullets.
-
-### Step 5: Craft pass
-
-Edit the draft against the rules:
-
-- Structural rules (1–9, 16–17): apply everywhere, unless the exemption list
-  explicitly disables one (e.g., deliberate fragments under Rule 6).
-- Voice-adjacent rules (10–15, 18): apply only where the profile is silent.
-  If the profile says the user hedges, Rule 11 does not fire. If their rhythm
-  is loose conjunction-chained sentences, Rule 14 does not fire.
-
-### Step 6: Fidelity check
-
-Before delivering, check the draft against the profile:
-
-- Sentence-length distribution and paragraph length in range?
-- Lexicon: uses their signature words; contains none of their never-words?
-- Hedging and formality at their observed level?
-- Formatting habits respected (prose vs. headers vs. bullets)?
-- **No assistant-register leakage:** no stock LLM phrasing, no uniform
-  paragraph sizes, no reflexive bullet lists or bolded triads, no
-  "delve/leverage/streamline" vocabulary unless it is genuinely theirs.
-
-If long-form coverage is marked low-confidence in the profile, say so when
-delivering: the draft leans on craft defaults, and their corrections will be
-worth feeding back through voice-tune (or re-harvesting) once available.
+Follow voice-profile's fidelity procedure (`voice-profile/SKILL.md`), steps
+3–6 — draft voice-first from sentence one, never neutral-then-translate; run
+the craft pass against `references/strunk-rules.md`, applying the rule-range
+split noted in Step 3 above (structural rules 1–9/16–17 apply everywhere
+unless the exemption list explicitly disables one; voice-adjacent rules
+10–15/18 apply only where the profile is silent); then the fidelity
+self-check and low-confidence disclosure.
 
 ### Output
 
