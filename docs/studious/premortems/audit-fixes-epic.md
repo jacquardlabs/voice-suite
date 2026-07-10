@@ -94,3 +94,13 @@ changeset.
     fidelity check — a trimmed never-words list or an omitted disclosure line ships
     silently. The finale should verify both are covered. Folded in from
     `voice-card-export`'s own story-level pre-mortem (items 1, 4, 6).
+
+13. **`voice-check-fidelity-scorer` could reintroduce the exact coupling problems the
+    epic exists to fix.** It must read `references/ai-tells.md` by reference, not
+    inline/paraphrase the tells rubric (the "fifth divergent list" this story's whole
+    premise is preventing), and must quote the canonical "Resolving the profile" string
+    byte-identical rather than restate it. Separately, a documented voice trait (e.g.
+    dense em-dash use) must never itself be flagged as a deviation or an AI-tell —
+    scoring the user's own signature against itself would contradict "Profile over
+    everything." The finale should verify both. Folded in from
+    `voice-check-fidelity-scorer`'s own story-level pre-mortem (items 2, 3, 6).
