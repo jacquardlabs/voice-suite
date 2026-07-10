@@ -1,6 +1,6 @@
 # Voice Suite
 
-Eight Claude Skills that mine text you actually wrote, distill it into a voice profile, and generate new prose in that voice — docs, emails, chat messages, rewrites — or export it to carry elsewhere.
+Nine Claude Skills that mine text you actually wrote, distill it into a voice profile, generate new prose in that voice — docs, emails, chat messages, rewrites — export it to carry elsewhere, or score outside text against it.
 
 ## What's here
 
@@ -9,6 +9,7 @@ Eight Claude Skills that mine text you actually wrote, distill it into a voice p
 - **voice-doc / voice-email / voice-chat / voice-rewrite** — the generators. Draft new long-form docs, email, short-form messages, or rewrite existing text in your voice. Draft-only — none send or publish.
 - **voice-tune** — the feedback loop. Diffs your edits against generated drafts, extracts voice deltas (not content changes), requires a repeated pattern before patching, and confirms every profile change before writing it.
 - **voice-card** — the portable export. Compiles your harvested profile into a single ~300-word prompt block — top traits, 2 micro-exemplars, never-words, register notes, a pointer back to this suite — sized to paste into another AI surface's custom instructions (ChatGPT, Cursor, Gemini-in-Gmail, a CLAUDE.md). Read-only; writes nothing, calls no external API.
+- **voice-check** — the fidelity scorer. Scores any pasted text — not just text this suite drafted — against your installed profile: generic assistant-register tells plus a per-trait deviation report against your own observed voice. Read-only; offers, never forces, a handoff to voice-rewrite if you want it fixed.
 
 ## Install
 
@@ -32,11 +33,11 @@ Or install this plugin directly:
 
 ### Claude (web or Desktop app)
 
-Skills upload as ZIPs — one per skill, 8 total. You need a Claude account (Pro or Max).
+Skills upload as ZIPs — one per skill, 9 total. You need a Claude account (Pro or Max).
 
 **1. Download the repo.** Click **Code → Download ZIP** on this page and unzip it.
 
-**2. Compress each skill folder.** Open `voice-suite/skills/`. Right-click each subfolder → Compress (Mac) or Send to → Compressed (zipped) folder (Windows). Eight folders, eight ZIPs.
+**2. Compress each skill folder.** Open `voice-suite/skills/`. Right-click each subfolder → Compress (Mac) or Send to → Compressed (zipped) folder (Windows). Nine folders, nine ZIPs.
 
 **3. Upload each ZIP.** In Claude: account menu → **Customize** → **Skills** → **+** → **Upload a skill**.
 
@@ -134,9 +135,9 @@ wipe. Where it actually lives depends on the surface:
   above).
 
 Every skill in this suite (voice-doc, voice-email, voice-chat, voice-rewrite,
-voice-harvest, voice-tune, voice-card) resolves the profile directory the
-same way, in that order — see `skills/voice-profile/SKILL.md`'s "Resolving
-the profile" section for the exact procedure.
+voice-harvest, voice-tune, voice-card, voice-check) resolves the profile
+directory the same way, in that order — see `skills/voice-profile/SKILL.md`'s
+"Resolving the profile" section for the exact procedure.
 
 ---
 
@@ -181,8 +182,9 @@ Chat never gets a craft pass — Strunk on a Slack message is a category error. 
 | `voice-rewrite` | transforms existing text into your voice |
 | `voice-tune` | learns from your edits; patches the profile |
 | `voice-card` | compiles a portable voice card for other AI surfaces |
+| `voice-check` | scores pasted text against your profile; hands off to voice-rewrite |
 
-All 8 drafted.
+All 9 drafted.
 
 ## License
 

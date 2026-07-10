@@ -5,8 +5,8 @@
 # Background: docs/design/profile-durability.md, "The canonical
 # resolution-order string" — this exact block must appear unparaphrased in
 # voice-doc, voice-email, voice-chat, voice-rewrite, voice-harvest,
-# voice-tune, and voice-card (seven consumers), plus once more as the
-# authoritative copy in voice-profile/SKILL.md (eight files total). A
+# voice-tune, voice-card, and voice-check (eight consumers), plus once more
+# as the authoritative copy in voice-profile/SKILL.md (nine files total). A
 # paraphrase or reflow in any one of them silently reintroduces the
 # per-generator path-resolution drift this story fixed (issue #4).
 #
@@ -25,6 +25,7 @@ FILES=(
   "skills/voice-harvest/SKILL.md"
   "skills/voice-tune/SKILL.md"
   "skills/voice-card/SKILL.md"
+  "skills/voice-check/SKILL.md"
 )
 
 # The block is a markdown blockquote starting at the line that introduces it
@@ -45,7 +46,7 @@ reference_block=""
 
 for f in "${FILES[@]}"; do
   if [[ ! -f "$f" ]]; then
-    echo "MISSING: $f does not exist (expected one of the 8 canonical-string files)" >&2
+    echo "MISSING: $f does not exist (expected one of the 9 canonical-string files)" >&2
     status=1
     continue
   fi

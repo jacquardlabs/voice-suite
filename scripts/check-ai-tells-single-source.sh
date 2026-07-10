@@ -45,6 +45,7 @@ POINTER_FILES=(
   "skills/voice-profile/SKILL.md"
   "skills/voice-rewrite/SKILL.md"
   "skills/voice-harvest/SKILL.md"
+  "skills/voice-check/SKILL.md"
 )
 
 # Distinctive fragments of the pre-consolidation restatements. A match
@@ -78,7 +79,7 @@ done < <(find skills -name '*.md' -print0)
 
 for f in "${POINTER_FILES[@]}"; do
   if [[ ! -f "$f" ]]; then
-    echo "MISSING: $f does not exist (expected one of the 3 canonical consumers)" >&2
+    echo "MISSING: $f does not exist (expected one of the 4 canonical consumers)" >&2
     status=1
     continue
   fi
