@@ -4,9 +4,9 @@
 
 | Surface | Framework / tech | Entry point |
 |---------|------------------|-------------|
-| plugin | Claude Code Skills (`.claude-plugin/plugin.json` + `skills/*/SKILL.md`, no `commands/` or `agents/` dirs) | `/voice-harvest`, `/voice-doc`, `/voice-email`, `/voice-chat`, `/voice-rewrite`, `/voice-tune`, plus natural-language auto-trigger per skill's `description` frontmatter |
+| plugin | Claude Code Skills (`.claude-plugin/plugin.json` + `skills/*/SKILL.md`, no `commands/` or `agents/` dirs) | `/voice-harvest`, `/voice-doc`, `/voice-email`, `/voice-chat`, `/voice-rewrite`, `/voice-tune`, `/voice-card`, plus natural-language auto-trigger per skill's `description` frontmatter |
 
-Single surface. No web UI, CLI binary, TUI, REST API, or report/export template exists anywhere in the repo — the product *is* seven Claude Skills; `voice-profile` is a data-only skill (never invoked directly, README.md:8) rather than a distinct surface.
+Single surface. No web UI, CLI binary, TUI, REST API, or report/export template exists anywhere in the repo — the product *is* eight Claude Skills; `voice-profile` is a data-only skill (never invoked directly, README.md:8) rather than a distinct surface. `voice-card` compiles a portable prompt block delivered in the chat response, not a rendered report/export template — it doesn't introduce a new surface either.
 
 *(High confidence — confirmed by directory layout: `skills/` contains only `SKILL.md` + `references/`, no `src/`, no server, no `package.json`/entry-point script.)*
 
@@ -43,14 +43,14 @@ The product's concepts are named consistently at the top level (skill names, reg
 
 ### Plugin / prompt tooling
 
-- **Skill naming**: `voice-<verb-or-noun>` — `voice-harvest`, `voice-profile`, `voice-doc`, `voice-email`, `voice-chat`, `voice-rewrite`, `voice-tune`. Flat, no prefix families (contrast with Studious's own `gate-`/`deep-review` prefixing) — each skill name stands alone as the invocation command.
-- **Frontmatter convention**: every `SKILL.md` has exactly `name` + `description` (YAML block, `description` as a folded `>` block). No `allowed-tools`, no other frontmatter fields, in any of the 7 skills — a flatter contract than plugins that restrict tool access per skill.
-- **Trigger convention**: descriptions embed explicit quoted trigger phrases ("draft a Slack message," "make this sound like me") plus explicit hand-off phrases to sibling skills ("for email use voice-email"). Every generator's description ends with a disambiguation clause pointing at the other 3 generators — a deliberate, repeated pattern (confirmed in all 4 generator frontmatters), not incidental duplication.
-- **No verdict/output vocabulary**: unlike a gate-style plugin, no skill emits a canonical result token (no `PASS`/`FAIL`, no `BUILD`/`DEFER`). Output is always a prose draft or a written/patched profile file — the "result" is the artifact itself.
+- **Skill naming**: `voice-<verb-or-noun>` — `voice-harvest`, `voice-profile`, `voice-doc`, `voice-email`, `voice-chat`, `voice-rewrite`, `voice-tune`, `voice-card`. Flat, no prefix families (contrast with Studious's own `gate-`/`deep-review` prefixing) — each skill name stands alone as the invocation command.
+- **Frontmatter convention**: every `SKILL.md` has exactly `name` + `description` (YAML block, `description` as a folded `>` block). No `allowed-tools`, no other frontmatter fields, in any of the 8 skills — a flatter contract than plugins that restrict tool access per skill.
+- **Trigger convention**: descriptions embed explicit quoted trigger phrases ("draft a Slack message," "make this sound like me") plus explicit hand-off phrases to sibling skills ("for email use voice-email"). Every generator's description ends with a disambiguation clause pointing at the other 3 generators — a deliberate, repeated pattern (confirmed in all 4 generator frontmatters), not incidental duplication. `voice-card` follows the same disambiguation convention, pointing at the generators and voice-harvest instead of at other generators.
+- **No verdict/output vocabulary**: unlike a gate-style plugin, no skill emits a canonical result token (no `PASS`/`FAIL`, no `BUILD`/`DEFER`). Output is always a prose draft, a written/patched profile file, or (for `voice-card`) a compiled static block — the "result" is the artifact itself.
 - **No severity/tier vocabulary in reports**: the only tiered vocabulary in the product is the profile's `high`/`medium`/`low` confidence tier (see Vocabulary, above) — there is no Critical/Important/Minor-style finding severity because the product doesn't produce audit-style reports.
 - **Report/output structure**: register files (`longform.md`/`email.md`/`chat.md`) follow the fixed section order in `_format.md` (Traits → Exemplars → Anti-patterns → [Strunk exemptions] → Coverage). This is the one place a strict structural contract is enforced by convention across every register file.
 
-*(High confidence — directly observed across all 7 `SKILL.md` files and the format contract.)*
+*(High confidence — directly observed across all 8 `SKILL.md` files and the format contract.)*
 
 ## Anti-patterns (do NOT do these)
 

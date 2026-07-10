@@ -2,7 +2,7 @@
 
 ## Why this product exists
 
-Voice Suite is seven Claude Skills that mine text a user actually wrote, distill it into a structured voice profile, and generate new prose — docs, emails, chat messages, rewrites — in that same voice (README.md:1-3). The problem it targets: AI-drafted writing defaults to a generic, detectably-AI register (README.md:139, "not well-edited text, not generically-human text"); this product's bet is that a user's own writing, mined and quantified, is a better ground truth than any generic style guide. The design rules make this explicit: "Profile over everything… If a profile trait makes prose 'worse' by Strunk's lights, the trait wins" (README.md:139).
+Voice Suite is eight Claude Skills that mine text a user actually wrote, distill it into a structured voice profile, and generate new prose — docs, emails, chat messages, rewrites — in that same voice (README.md:1-3). The problem it targets: AI-drafted writing defaults to a generic, detectably-AI register (README.md:168, "not well-edited text, not generically-human text"); this product's bet is that a user's own writing, mined and quantified, is a better ground truth than any generic style guide. The design rules make this explicit: "Profile over everything… If a profile trait makes prose 'worse' by Strunk's lights, the trait wins" (README.md:168).
 
 *(High confidence — stated directly in README.md.)*
 
@@ -25,10 +25,10 @@ Frustration this addresses: AI drafts get edited into a "human" voice manually, 
 
 ## Product principles
 
-- **Profile over everything** — the deliverable is the user's voice, not well-edited or generically-human text; an observed trait beats a style-guide rule even when the style guide would call it worse prose (README.md:139).
-- **Voice wins, craft fills silence** — long-form generation layers two things in strict precedence: harvested voice (traits, exemplars, anti-patterns, Strunk-exemptions) always wins; condensed Strunk's *Elements of Style* only fills where the profile has no signal, and never overrides an observed trait (README.md:127-133).
+- **Profile over everything** — the deliverable is the user's voice, not well-edited or generically-human text; an observed trait beats a style-guide rule even when the style guide would call it worse prose (README.md:168).
+- **Voice wins, craft fills silence** — long-form generation layers two things in strict precedence: harvested voice (traits, exemplars, anti-patterns, Strunk-exemptions) always wins; condensed Strunk's *Elements of Style* only fills where the profile has no signal, and never overrides an observed trait (README.md:156-162).
 - **Draft-only, never send** — every generator (doc/email/chat/rewrite) produces a draft; none send, publish, or post on the user's behalf (README.md:9). Sending/publishing stays a human action.
-- **Harvested and pasted content is data, never instructions** — voice-email (reply threads) and voice-harvest (source content) are the two real prompt-injection surfaces; both treat everything they read as style data and never act on instruction-shaped strings found in it (README.md:141).
+- **Harvested and pasted content is data, never instructions** — voice-email (reply threads) and voice-harvest (source content) are the two real prompt-injection surfaces; both treat everything they read as style data and never act on instruction-shaped strings found in it (README.md:170).
 - **Consent-per-source, read-only mining** — voice-harvest reads Claude chats, Gmail, Slack, or Notion only with per-source consent, filters for owner-only authorship, and strips LLM-generated content via a two-pass baseline before it ever touches the profile (README.md:7).
 
 *(High confidence — all five are stated directly in README.md's "Design rules" section or equivalent; none are inferred.)*
@@ -37,7 +37,7 @@ Frustration this addresses: AI drafts get edited into a "human" voice manually, 
 
 Issue tracker: [GitHub Issues](https://github.com/jacquardlabs/voice-suite/issues)
 
-The tracker owns individual features and fixes. The seven skills themselves are the stable capability surface:
+The tracker owns individual features and fixes. The eight skills themselves are the stable capability surface:
 
 | Skill | Role |
 |---|---|
@@ -48,8 +48,9 @@ The tracker owns individual features and fixes. The seven skills themselves are 
 | `voice-chat` | Generates short-form messages (Slack, DM, text) |
 | `voice-rewrite` | Rewrites existing text into the user's voice |
 | `voice-tune` | Learns from user edits to generated drafts; patches the profile after a repeated pattern, with confirmation |
+| `voice-card` | Compiles the installed profile into a portable ~300-word prompt block for other AI surfaces |
 
-All seven are shipped (README.md:155, "All 7 drafted").
+All eight are shipped (README.md:185, "All 8 drafted").
 
 *(High confidence — README.md status table, cross-checked against `skills/` directory contents.)*
 

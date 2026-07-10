@@ -66,6 +66,19 @@ voice-tune) quotes the block below byte-identical:
 > never mix a `global.md` from one location with a register file from the
 > other.
 
+**The block's final paragraph — "the matching register file" (singular) —
+describes the read-for-drafting path the four generators follow**
+(voice-doc, voice-email, voice-chat, voice-rewrite): each drafts in one
+register per request, so it loads exactly one register file. It is not a
+universal rule for every consumer of this block. voice-card is a documented
+exception: it compiles a single portable card that has to serve whatever
+register the user drafts in next on another surface, so it reads
+`global.md` plus all three register files — see
+`skills/voice-card/SKILL.md`'s "Resolving the profile" section. Any future
+non-generator consumer should likewise state its own register-selection
+behavior explicitly rather than assume the singular wording above applies
+unmodified.
+
 ## The fidelity procedure (shared)
 
 Every generation skill (voice-doc, voice-email, voice-chat, voice-rewrite)
