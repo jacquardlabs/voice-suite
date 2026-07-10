@@ -2,8 +2,9 @@
 
 Every per-register reference file (`longform.md`, `email.md`, `chat.md`)
 follows this structure. voice-harvest emits it; voice-tune patches it; the
-generation skills read it. Keep the section headings stable — the generators
-key off them.
+generation skills read it — except `## Pending observations`, which is
+write-side only (see below). Keep the section headings stable — the
+generators key off them.
 
 ---
 
@@ -56,7 +57,7 @@ Honesty metadata the generators use to calibrate and disclose:
 - **Date range:** earliest–latest (flags pre-AI vs. current voice).
 - **Confidence:** a computed tier, never an asserted label — look up the
   sample count against the register's threshold below and report tier
-  *with* count together, e.g. "medium (22 messages)". The tier is a pure
+  *with* count together, e.g. "medium (45 messages)". The tier is a pure
   function of that count and nothing else moves it directly: a tune-derived
   correction patches the trait or anti-pattern it corrects, not this tier —
   the tier only changes when the register's underlying sample count does
@@ -95,10 +96,14 @@ that look like a voice trait but haven't been seen enough times to trust.
 - **Promotion rule:** a 2nd occurrence makes it a real candidate; a 3rd
   occurrence promotes it into Traits or Anti-patterns (whichever it
   describes) and removes it from this list. An explicit user confirmation
-  ("yes, I always do that") promotes immediately regardless of count. Two
-  identically-worded sightings promote outright at occurrence 2; two
-  sightings that agree in substance but not wording hold for a 3rd before
-  promoting.
+  ("yes, I always do that") promotes immediately regardless of count.
+  Absent that, the wording comparison is between the observed instances
+  themselves — the actual phrase or construction the user wrote each
+  time — not between the logged one-line descriptions of them: two
+  sightings where that underlying phrase repeats verbatim promote outright
+  at occurrence 2; two sightings where the pattern is the same but the
+  actual wording differs (as in the example below) hold for a 3rd
+  occurrence before promoting.
 
 ---
 

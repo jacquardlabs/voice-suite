@@ -143,7 +143,7 @@ consistent violations, not one-offs.]
 - Sample count: [N messages]
 - Date range: [earliest – latest]
 - Confidence: [tier from the table above, with count] — [one-line basis],
-  e.g. "medium (22 messages) — mostly DMs, few group threads"
+  e.g. "medium (45 messages) — mostly DMs, few group threads"
 - Gaps: [what's thin or unrepresented]
 ---
 
@@ -234,7 +234,7 @@ here as numbers, not restated as a second table, so this copy and
 prompt fallback earlier in this file carries the one other, necessarily
 self-contained copy; see the note there.)
 
-Report the tier *with* its count together, e.g. "medium (22 messages)",
+Report the tier *with* its count together, e.g. "medium (45 messages)",
 never the tier alone. Below medium, apply `_format.md`'s two low-coverage
 gates: emit a trait only where at least 3 independent samples agree on it,
 and never emit a Strunk exemption.
