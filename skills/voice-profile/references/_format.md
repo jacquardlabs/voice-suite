@@ -54,8 +54,43 @@ Honesty metadata the generators use to calibrate and disclose:
 
 - **Sample count:** how many authentic samples fed this register.
 - **Date range:** earliest–latest (flags pre-AI vs. current voice).
-- **Confidence:** high / medium / low, with a one-line basis.
+- **Confidence:** a computed tier, never an asserted label — look up the
+  sample count against the register's threshold below and report tier
+  *with* count together, e.g. "medium (22 messages)":
+
+  | Register | High | Medium | Low |
+  |---|---|---|---|
+  | Chat | ≥100 messages | ≥30 messages | <30 messages |
+  | Email | ≥40 sent messages | ≥15 sent messages | <15 sent messages |
+  | Longform | ≥8 pieces | ≥3 pieces | <3 pieces |
+
+  Below medium, two gates apply everywhere:
+  - Emit a given trait only where at least 3 independent samples agree on
+    it. A trait resting on one or two samples at low coverage is a guess
+    wearing a Traits-section costume.
+  - Never emit a Strunk exemption. A rule violation seen once or twice in a
+    thin longform sample is indistinguishable from an error; exemptions
+    require the volume to tell a deliberate pattern from a fluke.
 - **Gaps:** what's thin (e.g., "no external-formal emails observed").
+
+## `## Pending observations`
+
+A quarantine buffer for unconfirmed patterns — dated, one-line candidates
+that look like a voice trait but haven't been seen enough times to trust.
+
+- One line per observation: what was observed, when, and an occurrence
+  count that increments on repeat sightings.
+- **Generators ignore this section entirely.** It is write-side bookkeeping
+  between successive harvest/tune-style passes, not draft-time signal — the
+  fidelity procedure and every generation skill read Traits/Exemplars/
+  Anti-patterns/Coverage only.
+- **Promotion rule:** a 2nd occurrence makes it a real candidate; a 3rd
+  occurrence promotes it into Traits or Anti-patterns (whichever it
+  describes) and removes it from this list. An explicit user confirmation
+  ("yes, I always do that") promotes immediately regardless of count. Two
+  identically-worded sightings promote outright at occurrence 2; two
+  sightings that agree in substance but not wording hold for a 3rd before
+  promoting.
 
 ---
 
@@ -84,6 +119,9 @@ Honesty metadata the generators use to calibrate and disclose:
 ## Coverage
 - Sample count: 240 messages.
 - Date range: 2024-01 to 2025-12.
-- Confidence: high — large, recent, clean sample.
+- Confidence: high (240 messages) — large, recent, clean sample.
 - Gaps: few work-channel (vs. DM) samples.
+
+## Pending observations
+- 2026-06-30: opens replies with "quick note —" (seen 2x, not yet promoted).
 ```
