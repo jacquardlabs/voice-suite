@@ -111,6 +111,31 @@ On Claude web / Desktop: voice-tune identifies the changes but can't write back 
 
 ---
 
+## Where your profile data lives
+
+Harvested and tuned profile data is never stored inside the plugin- or
+skill-managed directories that `/plugin update` or a skill reinstall can
+wipe. Where it actually lives depends on the surface:
+
+- **Claude Code (CLI, Desktop, VS Code, JetBrains).** `~/.claude/voice-profile/` —
+  a sibling of `~/.claude/skills/` and `~/.claude/plugins/`, outside both, so
+  neither an update nor a reinstall of either kind ever touches it.
+  voice-harvest creates this directory on first run; every later harvest and
+  tune writes here.
+- **Claude (web or Desktop app).** No writable location outside the uploaded
+  skill bundle persists between conversations on this surface, so the
+  installed `voice-profile` skill's own files are the only copy that exists.
+  Harvest and tune write there, but only for the current session — to keep a
+  change, download and re-upload an updated `voice-profile.zip` (see step 3
+  above).
+
+Every skill in this suite (voice-doc, voice-email, voice-chat, voice-rewrite,
+voice-harvest, voice-tune) resolves the profile directory the same way, in
+that order — see `skills/voice-profile/SKILL.md`'s "Resolving the profile"
+section for the exact procedure.
+
+---
+
 ## Pipeline
 
 ```

@@ -17,8 +17,8 @@ description: >
 A container for the user's writing voice, expressed as data the generation
 skills consume. It carries:
 
-- **Global traits** (below): voice characteristics that hold across every
-  register.
+- **Global traits** (`references/global.md`): voice characteristics that hold
+  across every register.
 - **The fidelity procedure** (below): the shared draft-and-check loop every
   generation skill runs, so behavior is consistent across doc / email / chat /
   rewrite.
@@ -29,21 +29,41 @@ voice-harvest writes these files. voice-tune patches them. The generation
 skills only read them. Keep this separation — it is what makes the profile
 versionable and refreshable without touching any other skill.
 
-## Global traits
+Global traits live in `references/global.md`, not in this file — this file
+ships with the skill and is replaced wholesale on every plugin update, so it
+never holds live user data. See "Resolving the profile" below for where
+`global.md` and the register files actually live on disk.
 
-> Populated by voice-harvest. Until then this section is a template.
-> These are traits observed across ALL registers — the user's baseline
-> regardless of medium. Register-specific detail lives in the reference files.
+## Resolving the profile
 
-- **Lexicon — signature words/phrases:** _[harvest fills]_
-- **Lexicon — never-words (absent or actively avoided):** _[harvest fills]_
-- **Hedging baseline:** _[e.g., hedges often: "I think", "maybe", "probably"]_
-- **Contractions:** _[uses / avoids]_
-- **Sentence rhythm baseline:** _[mean length + variance across registers]_
-- **Punctuation tics:** _[em-dashes, ellipses, parentheticals, semicolons...]_
-- **Capitalization habits:** _[sentence case / lowercase-casual / Title Case]_
-- **Drift note:** _[if pre-AI and current voice differ, which one this profile
-  targets and why]_
+This is the authoritative copy of the canonical resolution order. Every
+consumer (voice-doc, voice-email, voice-chat, voice-rewrite, voice-harvest,
+voice-tune) quotes the block below byte-identical:
+
+> **Resolving the profile.** Find the profile directory by checking, in
+> order, and using the first that resolves:
+>
+> 1. `~/.claude/voice-profile/` (the Claude Code config dir, `~/.claude/` by
+>    default) — the stable, non-plugin-managed profile directory shared by
+>    Claude Code CLI, Desktop, and IDE. No plugin-managed or skill-managed
+>    path points here, so `/plugin update` and reinstalls never touch it.
+>    voice-harvest creates it on first run wherever this path is reachable,
+>    and always writes here afterward.
+> 2. This skill's own installed `references/` folder — the claude.ai (web or
+>    Desktop app) fallback, since no path outside the uploaded skill bundle
+>    persists between sessions there. Step 1 simply won't resolve on
+>    claude.ai (no such filesystem path exists there), so this is a plain
+>    fall-through, not a platform check. Writes here are session-only: to
+>    keep a harvest or tune change, the user must download and re-upload an
+>    updated `voice-profile.zip`.
+> 3. If the resolved directory's files are still the empty shipped
+>    templates, no profile exists yet. Fall back to this skill's own ad-hoc
+>    session profile from pasted samples, or point the user to voice-harvest.
+>
+> Read `global.md` plus the matching register file (`longform.md` /
+> `email.md` / `chat.md`) from whichever directory step 1 or 2 resolved to —
+> never mix a `global.md` from one location with a register file from the
+> other.
 
 ## The fidelity procedure (shared)
 

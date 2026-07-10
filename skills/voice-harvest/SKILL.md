@@ -213,18 +213,49 @@ lets voice-doc's craft pass enhance structure without sanding off voice. Emit
 exemptions only where the violation is *consistent* — a one-off comma splice
 is an error, not a trait.
 
-Also fill `voice-profile`'s **Global traits** section from traits that hold
-across all three registers.
+Also fill `global.md` from traits that hold across all three registers.
 
 ## Output
 
-After the exemplar approval gate, write the populated files into the installed
-`voice-profile` skill:
+After the exemplar approval gate, resolve the profile directory, then write
+the populated files there:
 
-- `voice-profile/SKILL.md` → Global traits section
-- `voice-profile/references/longform.md`
-- `voice-profile/references/email.md`
-- `voice-profile/references/chat.md`
+> **Resolving the profile.** Find the profile directory by checking, in
+> order, and using the first that resolves:
+>
+> 1. `~/.claude/voice-profile/` (the Claude Code config dir, `~/.claude/` by
+>    default) — the stable, non-plugin-managed profile directory shared by
+>    Claude Code CLI, Desktop, and IDE. No plugin-managed or skill-managed
+>    path points here, so `/plugin update` and reinstalls never touch it.
+>    voice-harvest creates it on first run wherever this path is reachable,
+>    and always writes here afterward.
+> 2. This skill's own installed `references/` folder — the claude.ai (web or
+>    Desktop app) fallback, since no path outside the uploaded skill bundle
+>    persists between sessions there. Step 1 simply won't resolve on
+>    claude.ai (no such filesystem path exists there), so this is a plain
+>    fall-through, not a platform check. Writes here are session-only: to
+>    keep a harvest or tune change, the user must download and re-upload an
+>    updated `voice-profile.zip`.
+> 3. If the resolved directory's files are still the empty shipped
+>    templates, no profile exists yet. Fall back to this skill's own ad-hoc
+>    session profile from pasted samples, or point the user to voice-harvest.
+>
+> Read `global.md` plus the matching register file (`longform.md` /
+> `email.md` / `chat.md`) from whichever directory step 1 or 2 resolved to —
+> never mix a `global.md` from one location with a register file from the
+> other.
+
+If the directory from step 1 doesn't exist yet, create it — this is the
+"voice-harvest creates it on first run" case the string above names. Write:
+
+- `global.md`
+- `longform.md`
+- `email.md`
+- `chat.md`
+
+into whichever directory the resolution order above landed on. Never write
+into `voice-profile/SKILL.md` — that file ships with the skill and is
+replaced wholesale on update; it is not a data file.
 
 Report coverage per register and name the gaps, so the user knows which
 registers are solid and which are thin. Note that voice-tune will sharpen the
