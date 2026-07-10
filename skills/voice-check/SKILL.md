@@ -33,9 +33,9 @@ of its own: same installed profile, same canonical resolution order, same
 The report has two distinct parts:
 
 1. **Generic assistant-register leakage** — the pasted text checked against
-   `references/ai-tells.md`'s Vocabulary, Structure, and Register
-   categories (the canonical tells detector every other consumer in this
-   suite already points at instead of restating — read the file itself
+   `voice-profile/references/ai-tells.md`'s Vocabulary, Structure, and
+   Register categories (the canonical tells detector every other consumer in
+   this suite already points at instead of restating — read the file itself
    rather than relying on memory of a shorter list). This part is
    register-agnostic.
 2. **Per-trait deviation against the user's own observed voice** — this is
@@ -44,9 +44,9 @@ The report has two distinct parts:
    sentence length, hedging level, lexicon, and formatting against that
    register file's and `global.md`'s quantified `## Traits`.
 
-Both parts together are the deliverable. `references/ai-tells.md` governs
-part 1 only — part 2 is the shared fidelity procedure's job and stays that
-way.
+Both parts together are the deliverable. `voice-profile/references/ai-tells.md`
+governs part 1 only — part 2 is the shared fidelity procedure's job and stays
+that way.
 
 ## Resolving the profile
 
@@ -134,8 +134,8 @@ into the deviation list.
    resolved directory — the same paths voice-harvest writes and the four
    generators read.
 4. **Check for generic assistant-register leakage.** Scan the pasted text
-   against `references/ai-tells.md`'s Vocabulary, Structure, and Register
-   categories.
+   against `voice-profile/references/ai-tells.md`'s Vocabulary, Structure,
+   and Register categories.
 5. **Compare against the user's own observed traits.** Match the pasted
    text's actual sentence-length distribution, hedging level, lexicon,
    punctuation, and formatting against the matched register file's
@@ -170,8 +170,8 @@ Assistant-register tells (ai-tells.md): 2 hits
 - Closes with a summary paragraph — a formulaic closer your exemplars don't show (Structure category)
 
 Trait deviations (vs. your email profile):
-- Sentence length: this text's mean 22 words (range 9–41) vs. your observed
-  mean 14 words (range 4–28) — noticeably longer and more even.
+- Sentence length: this text's mean 22 words, range 9–41, vs. your observed
+  mean 14 words, range 4–28 — noticeably longer and more even.
 - Hedging: 3 hedge phrases vs. your observed low-hedge baseline.
 - Lexicon: no deviation — no never-words present.
 - Formatting: no deviation.

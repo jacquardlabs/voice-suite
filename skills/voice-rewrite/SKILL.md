@@ -5,8 +5,12 @@ description: >
   whenever the user hands you text and asks to "make this sound like me,"
   "rewrite this in my voice," "de-AI this," "fix the tone so it sounds like
   me," "make this less robotic," "humanize this," or "put this in my words."
-  Also trigger when they paste an AI-generated draft and want it to read as
-  their own. This skill
+  Also trigger when they paste an AI-generated draft and want it rewritten
+  to read as their own — an imperative asking for an edit. For a question
+  asking only for a read, not an edit — "does this sound like me," "check
+  this against my voice," "did an AI write this" — use voice-check instead,
+  which reports without rewriting and offers, but never forces, a handoff
+  back to this skill. This skill
   transforms text the user provides — to draft NEW content from scratch use
   voice-doc / voice-email / voice-chat; to build the voice profile use
   voice-harvest.
