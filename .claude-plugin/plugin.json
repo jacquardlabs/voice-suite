@@ -1,7 +1,7 @@
 {
   "name": "voice-suite",
   "description": "Voice workflow skills for Claude Code — voice chat, email, docs, harvesting, and rewriting.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": {
     "name": "Jacquard Labs",
     "url": "https://github.com/jacquardlabs"
