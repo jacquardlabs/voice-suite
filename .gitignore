@@ -41,3 +41,6 @@ env/
 # Claude Code internals
 .claude/
 .gg/
+
+# Studious local gate ledger (do not commit)
+.studious/
