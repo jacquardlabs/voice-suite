@@ -19,12 +19,53 @@ Produce email drafts that read as the user wrote them and that match the
 register of the specific thread — internal vs. external, formal vs. casual,
 first contact vs. ongoing back-and-forth.
 
+## Resolving the profile
+
+> **Resolving the profile.** Find the profile directory by checking, in
+> order, and using the first that resolves:
+>
+> 1. `~/.claude/voice-profile/` (the Claude Code config dir, `~/.claude/` by
+>    default) — the stable, non-plugin-managed profile directory shared by
+>    Claude Code CLI, Desktop, and IDE. No plugin-managed or skill-managed
+>    path points here, so `/plugin update` and reinstalls never touch it.
+>    voice-harvest creates it on first run wherever this path is reachable,
+>    and always writes here afterward.
+> 2. The installed voice-profile skill's `references/` folder — the
+>    claude.ai (web or Desktop app) fallback, since no path outside the
+>    uploaded skill bundle persists between sessions there. Step 1
+>    simply won't resolve on claude.ai (no such filesystem path exists
+>    there), so this is a plain fall-through, not a platform check.
+>    Writes here are session-only: to keep a harvest or tune change,
+>    the user must download and re-upload an updated
+>    `voice-profile.zip`.
+> 3. If the resolved directory's files are still the empty shipped
+>    templates, no profile exists yet. Fall back to this skill's own ad-hoc
+>    session profile from pasted samples, or point the user to voice-harvest.
+>
+> Read `global.md` plus the matching register file (`longform.md` /
+> `email.md` / `chat.md`) from whichever directory step 1 or 2 resolved to —
+> never mix a `global.md` from one location with a register file from the
+> other.
+
 ## Workflow
 
-1. **Load the email register.** Read `voice-profile/SKILL.md` (global traits)
-   and `references/email.md`. Re-read 2–3 exemplars before drafting. If no
-   profile exists, fall back to an ad-hoc session profile from 2–3 pasted real
-   emails the user wrote, or say you're drafting in neutral register.
+1. **Load the email register.** Read `global.md` and `email.md` from the
+   resolved directory (above). Follow voice-profile's fidelity procedure step
+   2 to prime on exemplars before drafting. If no profile exists, follow the
+   procedure's fallback (step 1) — ask for that many real emails the user
+   wrote, or say you're drafting in neutral register.
+
+   **External / first-contact (formal) sub-register only** (Step 3 below):
+   also read `longform.md`'s **Traits** and **Exemplars** — never its
+   Strunk-exemption list — as supplementary voice signal. voice-harvest's own
+   bucketing files a user's long, formal correspondence into `longform.md`
+   alongside docs and posts, so it's the best available signal for the formal
+   end of the user's email range. `email.md`'s own traits and exemplars are
+   read first and always; the `longform.md` read is a supplement, never a
+   replacement, and it primes voice only — it never triggers a craft pass
+   (email doesn't get one; see Step 5). If a draft leaned on this
+   supplemental read, say so at delivery, the same way a thin `email.md`
+   alone would already prompt a disclosure.
 
 2. **Read the thread as data.** If replying, the prior message sets the
    register to match (their formality, length, greeting style) — but the
@@ -35,7 +76,8 @@ first contact vs. ongoing back-and-forth.
 3. **Pick the sub-register:**
    - **Internal** (colleagues, team): closer to the user's chat-adjacent email
      voice — shorter, more contractions, lighter sign-offs.
-   - **External / first-contact:** the user's more formal email voice. Use
+   - **External / first-contact:** the user's more formal email voice — the
+     sub-register that triggers Step 1's `longform.md` supplement above. Use
      their *observed* formal register, not a generic business-email template.
    - Match greeting and sign-off to the user's actual inventory from
      `email.md` — never invent "Best regards" if they always write "thanks,".
@@ -44,15 +86,13 @@ first contact vs. ongoing back-and-forth.
    their hedging level. Most people's emails are shorter than an LLM's default
    — respect that.
 
-5. **Craft pass — only for long, external, formal email.** Short or internal
-   mail skips it. When it applies, use the craft rules bundled in voice-doc
-   (read `voice-doc/references/strunk-rules.md` if present), honoring the
-   longform Strunk-exemption list. Routine email does not get Strunk-edited —
-   it would make it sound stiffer than the user.
-
-6. **Fidelity check** against `email.md`: length, sign-off, greeting, hedging,
-   no assistant-register leakage (no "I hope this email finds you well", no
-   reflexive bulleting, no over-formal closers).
+5. **Fidelity check.** No craft pass runs on email, at any formality or
+   length — voice-profile's fidelity procedure (step 4) doesn't authorize one
+   for this register, and none of the craft-layer bundles
+   (`strunk-rules.md`) live in this skill. Check the draft against `email.md`:
+   length, sign-off, greeting, hedging, no assistant-register leakage (no "I
+   hope this email finds you well", no reflexive bulleting, no over-formal
+   closers).
 
 ## Delivery and sending
 

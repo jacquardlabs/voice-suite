@@ -1,0 +1,29 @@
+name: Check canonical strings
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  canonical-resolution-string:
+    name: Resolving-the-profile block is byte-identical
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run guard
+        run: bash scripts/check-canonical-resolution-string.sh
+
+      - name: Run flat-register-read guard
+        run: bash scripts/check-flat-register-reads.sh
+
+      - name: Run fallback-sample-count guard
+        run: bash scripts/check-fallback-sample-count.sh
+
+      - name: Run ai-tells-single-source guard
+        run: bash scripts/check-ai-tells-single-source.sh
+
+      - name: Run no-email-craft-pass guard
+        run: bash scripts/check-no-email-craft-pass.sh

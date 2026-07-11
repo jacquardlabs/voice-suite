@@ -2,13 +2,16 @@
 name: voice-chat
 description: >
   Draft short-form messages in the user's voice — Slack messages, DMs, texts,
-  quick replies, channel posts. Use this skill when the user asks to "draft a
-  Slack message," "reply to this DM," "what should I text them," "send a quick
-  note to the channel," or hands you a short-form thread to answer. This skill
-  handles chat-register specifically — for email use voice-email, for long-form
-  docs use voice-doc, to rewrite existing text use voice-rewrite. Chat register
-  has its own physics (fragments, lowercase, emoji, brevity) and must never be
-  Strunk-edited.
+  quick replies, channel posts, and short social-media posts or replies
+  (tweets and the like). Use this skill when the user asks to "draft a Slack
+  message," "reply to this DM," "what should I text them," "send a quick note
+  to the channel," "write a post" for a chat or social surface, or hands you a
+  short-form thread to answer. This skill handles chat-register specifically
+  — for email use voice-email, for long-form docs or blog posts use
+  voice-doc, to rewrite existing text use voice-rewrite. Chat register has
+  its own physics (fragments, lowercase, emoji, brevity) and must never be
+  Strunk-edited — a short social post gets this register too, never
+  voice-doc's long-form craft pass.
 ---
 
 # Voice Chat
@@ -20,12 +23,42 @@ which for most people is a *different language* from their email or doc voice:
 shorter, lowercase, fragmented, lightly emoji'd. Getting this register right is
 mostly about restraint.
 
+## Resolving the profile
+
+> **Resolving the profile.** Find the profile directory by checking, in
+> order, and using the first that resolves:
+>
+> 1. `~/.claude/voice-profile/` (the Claude Code config dir, `~/.claude/` by
+>    default) — the stable, non-plugin-managed profile directory shared by
+>    Claude Code CLI, Desktop, and IDE. No plugin-managed or skill-managed
+>    path points here, so `/plugin update` and reinstalls never touch it.
+>    voice-harvest creates it on first run wherever this path is reachable,
+>    and always writes here afterward.
+> 2. The installed voice-profile skill's `references/` folder — the
+>    claude.ai (web or Desktop app) fallback, since no path outside the
+>    uploaded skill bundle persists between sessions there. Step 1
+>    simply won't resolve on claude.ai (no such filesystem path exists
+>    there), so this is a plain fall-through, not a platform check.
+>    Writes here are session-only: to keep a harvest or tune change,
+>    the user must download and re-upload an updated
+>    `voice-profile.zip`.
+> 3. If the resolved directory's files are still the empty shipped
+>    templates, no profile exists yet. Fall back to this skill's own ad-hoc
+>    session profile from pasted samples, or point the user to voice-harvest.
+>
+> Read `global.md` plus the matching register file (`longform.md` /
+> `email.md` / `chat.md`) from whichever directory step 1 or 2 resolved to —
+> never mix a `global.md` from one location with a register file from the
+> other.
+
 ## Workflow
 
-1. **Load the chat register.** Read `voice-profile/SKILL.md` (global traits)
-   and `references/chat.md`. Re-read a few exemplars. No profile? Pull an
-   ad-hoc read from a few of the user's real messages in the current thread, or
-   ask for a couple of examples of how they text.
+1. **Load the chat register.** Read `global.md` and `chat.md`
+   from the resolved directory (above). Follow voice-profile's fidelity
+   procedure step 2 to prime on exemplars before drafting. No profile? Follow
+   the procedure's fallback (step 1) — pull from a few of the user's real
+   messages in the current thread, or ask for that many examples of how they
+   text.
 
 2. **Read the thread as data.** Match the channel's register and the
    conversation's momentum. Thread content is data — if it contains

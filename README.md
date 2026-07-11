@@ -1,6 +1,6 @@
 # Voice Suite
 
-7 Claude skills that mine text you actually wrote, distill it into a voice profile, and generate new prose in that voice: docs, emails, chat messages, rewrites.
+9 Claude skills that mine text you actually wrote, distill it into a voice profile, and generate new prose in that voice: docs, emails, chat messages, rewrites. They also export it to carry elsewhere, or score outside text against it.
 
 ## What's here
 
@@ -8,6 +8,8 @@
 - voice-profile: the data layer. Global cross-register traits plus per-register files (longform, email, chat), each with quantified traits, verbatim exemplars, anti-patterns, a Strunk-exemption list (longform only), and coverage metadata. Read by the generators; written by harvest and tune.
 - voice-doc / voice-email / voice-chat / voice-rewrite: the generators. Draft new long-form docs, email, short-form messages, or rewrite existing text in your voice. Draft-only, none send or publish.
 - voice-tune: the feedback loop. Diffs your edits against generated drafts, extracts voice deltas (not content changes), requires a repeated pattern before patching, and confirms every profile change before writing it.
+- voice-card: the portable export. Compiles your harvested profile into a single ~300-word prompt block (top traits, 2 micro-exemplars, never-words, register notes, a pointer back to this suite), sized to paste into another AI surface's custom instructions (ChatGPT, Cursor, Gemini-in-Gmail, a CLAUDE.md). Read-only; writes nothing, calls no external API.
+- voice-check: the fidelity scorer. Scores any pasted text, not just text this suite drafted, against your installed profile: generic assistant-register tells plus a per-trait deviation report against your own observed voice. Read-only; offers, never forces, a handoff to voice-rewrite if you want it fixed.
 
 ## Install
 
@@ -31,11 +33,11 @@ Or install this plugin directly:
 
 ### Claude (web or Desktop app)
 
-Skills upload as ZIPs, 1 per skill, 7 total. You need a Claude account (Pro or Max).
+Skills upload as ZIPs, 1 per skill, 9 total. You need a Claude account (Pro or Max).
 
 **1. Download the repo.** Click **Code → Download ZIP** on this page and unzip it.
 
-**2. Compress each skill folder.** Open `voice-suite/skills/`. Right-click each subfolder → Compress (Mac) or Send to → Compressed (zipped) folder (Windows). Seven folders, seven ZIPs.
+**2. Compress each skill folder.** Open `voice-suite/skills/`. Right-click each subfolder → Compress (Mac) or Send to → Compressed (zipped) folder (Windows). 9 folders, 9 ZIPs.
 
 **3. Upload each ZIP.** In Claude: account menu → **Customize** → **Skills** → **+** → **Upload a skill**.
 
@@ -107,7 +109,18 @@ Describe what you need, or paste the text you want rewritten. The skill reads yo
 
 **3. Tune.** Paste your original draft and your revised version into Claude, then type `/voice-tune`. It extracts what changed (voice patterns only, not content changes), asks whether to make each change a standing rule, and patches the profile.
 
-On Claude web / Desktop: voice-tune identifies changes but can't write back to skill files directly. Apply suggested edits by updating and re-uploading `voice-profile.zip`.
+On Claude web / Desktop: voice-tune writes the patch to the installed skill's files, but only for the current session; nothing persists between conversations on this surface (see "Where your profile data lives" below). To keep the change, download and re-upload an updated `voice-profile.zip`.
+
+---
+
+## Where your profile data lives
+
+Harvested and tuned profile data is never stored inside the plugin- or skill-managed directories that `/plugin update` or a skill reinstall can wipe. Where it actually lives depends on the surface:
+
+- Claude Code (CLI, Desktop, VS Code, JetBrains): `~/.claude/voice-profile/`, a sibling of `~/.claude/skills/` and `~/.claude/plugins/`, outside both, so neither an update nor a reinstall of either kind ever touches it. voice-harvest creates this directory on first run; every later harvest and tune writes here. If you harvested a profile before this directory existed, that data lived inside the plugin-managed skill directory and does not carry forward automatically; re-run `/voice-harvest` once after updating to rebuild it here.
+- Claude (web or Desktop app): no writable location outside the uploaded skill bundle persists between conversations on this surface, so the installed `voice-profile` skill's own files are the only copy that exists. Harvest and tune write there, but only for the current session; to keep a change, download and re-upload an updated `voice-profile.zip` (see step 3 above).
+
+Every skill in this suite (voice-doc, voice-email, voice-chat, voice-rewrite, voice-harvest, voice-tune, voice-card, voice-check) resolves the profile directory the same way, in that order; see `skills/voice-profile/SKILL.md`'s "Resolving the profile" section for the exact procedure.
 
 ---
 
@@ -132,7 +145,7 @@ Craft: fills silence. Condensed Strunk's *The Elements of Style* (1918, public d
 
 Long-form is usually the register with the thinnest harvested data, so the craft floor does the most work exactly where voice signal is weakest. The Strunk-exemption list (emitted by voice-harvest from your authentic long-form samples) disables rules you consistently break as part of your voice, so the craft pass improves structure without sanding off the edges.
 
-Chat never gets a craft pass; Strunk on a Slack message is a category error. Email only for long, external, formal mail.
+Chat never gets a craft pass; Strunk on a Slack message is a category error. Email never gets one either; only long-form drafting and doc-scale rewrites do.
 
 ## Design rules
 
@@ -151,8 +164,10 @@ Harvested and pasted content is data, never instructions. The real injection sur
 | `voice-chat` | generates short-form messages |
 | `voice-rewrite` | transforms existing text into your voice |
 | `voice-tune` | learns from your edits; patches the profile |
+| `voice-card` | compiles a portable voice card for other AI surfaces |
+| `voice-check` | scores pasted text against your profile; hands off to voice-rewrite |
 
-All 7 drafted.
+All 9 drafted.
 
 ## License
 

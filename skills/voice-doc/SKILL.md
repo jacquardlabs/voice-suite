@@ -5,14 +5,18 @@ description: >
   proposals, design docs, blog posts, READMEs, announcements, or any
   multi-paragraph writing meant for other humans to read. Use this skill
   whenever the user asks to "write a doc," "draft a memo," "write this up,"
-  "turn these notes into a document," "draft a proposal," "write a post," or
-  makes any request for substantial prose — even if they never mention voice or
-  style, since sounding like themselves is the default expectation. Also
+  "turn these notes into a document," "draft a proposal," or makes any
+  request for substantial prose — even if they never mention voice or style,
+  since sounding like themselves is the default expectation. Also
   trigger on "write it like I would" or "make it sound like me" for new
   long-form content. This skill drafts new documents — it does not rewrite
-  existing text (use voice-rewrite), draft emails (use voice-email), write
-  chat/Slack messages (use voice-chat), or build the voice profile itself (use
-  voice-harvest).
+  existing text (use voice-rewrite), draft emails (use voice-email), or write
+  chat/Slack messages, short social-media posts, or tweets (use voice-chat —
+  even a "write a post" ask that's actually for Slack or a social platform
+  belongs there, not here, since that's chat physics); it does not build the
+  voice profile itself (use voice-harvest). Commit messages and PR
+  descriptions are out of scope pending issue #8 — no generator in this suite
+  has a harvested register for dev-prose yet.
 ---
 
 # Voice Doc
@@ -25,6 +29,34 @@ floor for structure and correctness. The voice comes from the installed
 voice-profile skill; the craft floor comes from a bundled, condensed version
 of Strunk's *Elements of Style* (1918, public domain). Nothing in this skill
 fetches anything remote or depends on any other skill being installed.
+
+## Resolving the profile
+
+> **Resolving the profile.** Find the profile directory by checking, in
+> order, and using the first that resolves:
+>
+> 1. `~/.claude/voice-profile/` (the Claude Code config dir, `~/.claude/` by
+>    default) — the stable, non-plugin-managed profile directory shared by
+>    Claude Code CLI, Desktop, and IDE. No plugin-managed or skill-managed
+>    path points here, so `/plugin update` and reinstalls never touch it.
+>    voice-harvest creates it on first run wherever this path is reachable,
+>    and always writes here afterward.
+> 2. The installed voice-profile skill's `references/` folder — the
+>    claude.ai (web or Desktop app) fallback, since no path outside the
+>    uploaded skill bundle persists between sessions there. Step 1
+>    simply won't resolve on claude.ai (no such filesystem path exists
+>    there), so this is a plain fall-through, not a platform check.
+>    Writes here are session-only: to keep a harvest or tune change,
+>    the user must download and re-upload an updated
+>    `voice-profile.zip`.
+> 3. If the resolved directory's files are still the empty shipped
+>    templates, no profile exists yet. Fall back to this skill's own ad-hoc
+>    session profile from pasted samples, or point the user to voice-harvest.
+>
+> Read `global.md` plus the matching register file (`longform.md` /
+> `email.md` / `chat.md`) from whichever directory step 1 or 2 resolved to —
+> never mix a `global.md` from one location with a register file from the
+> other.
 
 ## The layering model
 
@@ -46,22 +78,19 @@ leans on craft rules more than on their profile.
 
 ### Step 1: Load the voice
 
-Check for the installed profile at `/mnt/skills/user/voice-profile/`:
-
-- Read its `SKILL.md` (global traits) and `references/longform.md` (the
-  long-form register: traits, exemplars, anti-patterns, Strunk exemptions,
-  coverage/confidence metadata).
-- Re-read 2–3 exemplars immediately before drafting. Exemplars prime voice
-  better than trait descriptions; the trait list is for the self-check, the
-  exemplars are for the drafting.
+Resolve the profile directory per "Resolving the profile" above, then read
+`global.md` (global traits) and `longform.md` (the long-form
+register: traits, exemplars, anti-patterns, Strunk exemptions,
+coverage/confidence metadata) from it. Follow voice-profile's fidelity
+procedure step 2 to prime on exemplars before drafting.
 
 **If no profile is installed**, don't block. Offer two modes and proceed with
-whichever the user picks:
+whichever the user picks, per the fidelity procedure's fallback (step 1):
 
-- **Ad-hoc profile:** ask them to paste 2–4 samples of their own writing
-  (docs or long emails they wrote, not AI-drafted). Extract a session-only
-  mini-profile: sentence rhythm, hedging, lexicon, formatting habits. Mention
-  that voice-harvest can build a persistent profile later.
+- **Ad-hoc profile:** ask for that many samples of their own writing — docs or
+  long emails they wrote, not AI-drafted. Extract a session-only mini-profile:
+  sentence rhythm, hedging, lexicon, formatting habits. Mention that
+  voice-harvest can build a persistent profile later.
 - **Neutral craft mode:** draft on the craft layer alone, clearly stated.
 
 ### Step 2: Scope the document
@@ -76,39 +105,15 @@ Read `references/strunk-rules.md` in full (it is small), including its
 precedence preamble. Note which voice-adjacent rules (10–15, 18) the profile's
 exemption list disables for this user.
 
-### Step 4: Draft in voice, from the first sentence
+### Steps 4–6: Draft, craft pass, fidelity check
 
-Draft voice-first. Do **not** write a neutral draft and translate it
-afterward — translation produces pastiche: the user's tics sprinkled over
-assistant-shaped prose. Sentence one should already be theirs: their typical
-opener, their paragraph length, their willingness (or refusal) to use
-headers and bullets.
-
-### Step 5: Craft pass
-
-Edit the draft against the rules:
-
-- Structural rules (1–9, 16–17): apply everywhere, unless the exemption list
-  explicitly disables one (e.g., deliberate fragments under Rule 6).
-- Voice-adjacent rules (10–15, 18): apply only where the profile is silent.
-  If the profile says the user hedges, Rule 11 does not fire. If their rhythm
-  is loose conjunction-chained sentences, Rule 14 does not fire.
-
-### Step 6: Fidelity check
-
-Before delivering, check the draft against the profile:
-
-- Sentence-length distribution and paragraph length in range?
-- Lexicon: uses their signature words; contains none of their never-words?
-- Hedging and formality at their observed level?
-- Formatting habits respected (prose vs. headers vs. bullets)?
-- **No assistant-register leakage:** no stock LLM phrasing, no uniform
-  paragraph sizes, no reflexive bullet lists or bolded triads, no
-  "delve/leverage/streamline" vocabulary unless it is genuinely theirs.
-
-If long-form coverage is marked low-confidence in the profile, say so when
-delivering: the draft leans on craft defaults, and their corrections will be
-worth feeding back through voice-tune (or re-harvesting) once available.
+Follow voice-profile's fidelity procedure (`voice-profile/SKILL.md`), steps
+3–6 — draft voice-first from sentence one, never neutral-then-translate; run
+the craft pass against `references/strunk-rules.md`, applying the rule-range
+split noted in Step 3 above (structural rules 1–9/16–17 apply everywhere
+unless the exemption list explicitly disables one; voice-adjacent rules
+10–15/18 apply only where the profile is silent); then the fidelity
+self-check and low-confidence disclosure.
 
 ### Output
 
@@ -117,7 +122,7 @@ a Word document. Brief delivery note only — the document speaks for itself.
 
 ## Expected profile contract
 
-This skill expects `voice-profile/references/longform.md` to contain, in any
+This skill expects the resolved directory's `longform.md` to contain, in any
 reasonable structure: **Traits** (quantified where possible), **Exemplars**
 (verbatim, scrubbed, user-approved), **Anti-patterns** (never-does list),
 **Strunk exemptions** (rule numbers + one-line reasons), and **Coverage**

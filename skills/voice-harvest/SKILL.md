@@ -22,6 +22,34 @@ text or LLM-generated drafts produces an inauthentic "you." So this skill is
 deliberately conservative — **precision over recall.** When a sample is
 ambiguous, exclude it. There is almost always enough clean data to spare.
 
+## Resolving the profile
+
+> **Resolving the profile.** Find the profile directory by checking, in
+> order, and using the first that resolves:
+>
+> 1. `~/.claude/voice-profile/` (the Claude Code config dir, `~/.claude/` by
+>    default) — the stable, non-plugin-managed profile directory shared by
+>    Claude Code CLI, Desktop, and IDE. No plugin-managed or skill-managed
+>    path points here, so `/plugin update` and reinstalls never touch it.
+>    voice-harvest creates it on first run wherever this path is reachable,
+>    and always writes here afterward.
+> 2. The installed voice-profile skill's `references/` folder — the
+>    claude.ai (web or Desktop app) fallback, since no path outside the
+>    uploaded skill bundle persists between sessions there. Step 1
+>    simply won't resolve on claude.ai (no such filesystem path exists
+>    there), so this is a plain fall-through, not a platform check.
+>    Writes here are session-only: to keep a harvest or tune change,
+>    the user must download and re-upload an updated
+>    `voice-profile.zip`.
+> 3. If the resolved directory's files are still the empty shipped
+>    templates, no profile exists yet. Fall back to this skill's own ad-hoc
+>    session profile from pasted samples, or point the user to voice-harvest.
+>
+> Read `global.md` plus the matching register file (`longform.md` /
+> `email.md` / `chat.md`) from whichever directory step 1 or 2 resolved to —
+> never mix a `global.md` from one location with a register file from the
+> other.
+
 ## Consent and privacy first
 
 Before reading anything:
@@ -49,10 +77,11 @@ Sources are reached through deferred tools — search for them before use:
 
 - **Claude chats:** `conversation_search` and `recent_chats`. The
   zero-connector baseline; attempt these first.
-- **Gmail / Slack / Notion / Drive:** call `tool_search` to load connectors if
-  the user approved them. If a requested source isn't connected, say so and
-  tell the user they can enable it in the connectors menu; proceed with what's
-  available.
+- **Gmail / Slack / Notion / Drive:** use the platform's deferred-tool search
+  (`tool_search` / `ToolSearch` in Claude Code; the equivalent mechanism on
+  other Claude surfaces) to load connectors if the user approved them. If a
+  requested source isn't connected, say so and tell the user they can enable
+  it in the connectors menu; proceed with what's available.
 
 **If `conversation_search` / `recent_chats` are unavailable** (tools not found
 in the registry), use the relay prompt fallback below instead of silently
@@ -61,78 +90,20 @@ failing or asking for manual pastes.
 ## Relay prompt fallback
 
 When Claude chat history tools are unavailable — common in Claude Code sessions
-that lack the chat-search connector — give the user this prompt to run in a
-Claude surface that *does* have history access (Claude Desktop, claude.ai web).
-They paste the response back; treat it as pre-filtered source material and
-proceed from the Synthesis step.
+that lack the chat-search connector — give the user the prompt in
+`references/relay-prompt.md` to run in a Claude surface that *does* have
+history access (Claude Desktop, claude.ai web). They paste the response back;
+treat it as pre-filtered source material and proceed from the Synthesis step.
 
-Deliver the prompt in a fenced code block so the user can copy it cleanly:
-
-````
-Search my Claude conversation history using conversation_search and
-recent_chats. I want to extract my authentic writing voice for a voice profile.
-Follow these rules exactly:
-
-**Source:** My user turns only — never assistant turns. Within my user turns,
-skip any block that looks pasted rather than typed (a long, polished passage
-inside an otherwise terse message is pasted content — length + register
-discontinuity within a single turn is the tell).
-
-**LLM-content filter (two passes):**
-Pass 1 — build a trusted baseline from my oldest and most casual messages:
-short replies, typo'd messages, quick reactions. Extract their stylometry:
-typo/disfluency rate, sentence-length mean and variance, lexicon, punctuation
-habits.
-Pass 2 — score everything else against that baseline. Exclude samples with:
-zero typos when my baseline has them, collapsed sentence-length variance,
-vocabulary spikes (delve, leverage, streamline, "I hope this finds you well"),
-bullet-heavy structure where my baseline is prose, or close match to a nearby
-assistant turn.
-
-**Bucket surviving samples into three registers:**
-- Longform — multi-paragraph explanations, technical writeups, detailed
-  descriptions
-- Email — correspondence-register messages
-- Chat — short replies, quick questions, reactions
-
-**Output this structure for each register:**
-
----
-REGISTER: [longform / email / chat]
-
-## Traits
-[Quantified: sentence length mean + range, paragraph length, hedging level +
-specific hedge words, formality level, signature lexicon words, never-words,
-punctuation tics (em-dashes, ellipses, semicolons, parentheses), formatting
-habits (prose vs bullets vs headers), structural habits (how I open, close,
-transition)]
-
-## Exemplars
-[4–8 verbatim passages I actually wrote in this register, scrubbed of
-names/numbers/identifying details. Span the range — include a terse one, a
-careful one, a longer one.]
-
-## Anti-patterns
-[Never-does list: specific constructions, words, or formatting I demonstrably
-avoid]
-
-## Strunk exemptions
-[Longform only: Strunk's Elements of Style rules I consistently break as part
-of my voice. Format: "Rule N (name) — exempt: [one-line reason]". Only
-consistent violations, not one-offs.]
-
-## Coverage
-- Sample count: [N messages]
-- Date range: [earliest – latest]
-- Confidence: [high / medium / low] — [one-line basis]
-- Gaps: [what's thin or unrepresented]
----
-
-Also produce a GLOBAL TRAITS section — characteristics that hold across all
-registers.
-
-Output all four sections (Global + three registers) in sequence.
-````
+Deliver the prompt in a fenced code block so the user can copy it cleanly.
+`references/relay-prompt.md` carries its own literal copy of the
+confidence-tier table and the vocabulary-spike examples, because the Claude
+surface running the prompt has no access to this skill's files and can't
+reference `_format.md` or `ai-tells.md` directly — that duplication is
+deliberate, not drift; see the note in `relay-prompt.md` itself. If
+`_format.md`'s Coverage table or `ai-tells.md`'s Vocabulary category ever
+change, update `relay-prompt.md`'s copies and the Synthesis step's citation
+further below along with them.
 
 **After the user pastes the response back:**
 
@@ -185,10 +156,12 @@ mean and variance, lexicon, punctuation habits.
   pasted a Claude draft back), or a sent email matches a Claude output from the
   same period (cross-source echo).
 - **Stylometric discontinuity:** typo rate drops to zero; sentence-length
-  variance collapses; suddenly perfect parallelism; vocabulary spikes
-  ("delve", "leverage", "streamline", "I hope this finds you well").
+  variance collapses; suddenly perfect parallelism; or a vocabulary spike into
+  `voice-profile/references/ai-tells.md`'s Vocabulary category.
 - **Structural tells:** bullet-heavy email from a prose-baseline writer;
-  bolded triads; sign-offs that never appear in trusted samples.
+  sign-offs that never appear in trusted samples; or any Structure-category
+  tell from the same `ai-tells.md` showing up against a baseline that
+  doesn't have it.
 
 **Policy:** ambiguous → exclude or queue for user review. A false exclude costs
 one sample; a false include poisons the voice.
@@ -202,9 +175,26 @@ flag the drift in the profile's global Drift note.
 
 Bucket the surviving samples by register — **longform** (docs, long emails,
 posts), **email** (typical correspondence), **chat** (Slack/DM/text) — and for
-each, fill the contract in `voice-profile/references/_format.md`: quantified
-Traits, 3–8 scrubbed Exemplars spanning the range, the Anti-pattern list, and
-Coverage metadata (count, date range, confidence, gaps).
+each, fill the contract in the installed voice-profile skill's
+`references/_format.md` (this ships with the skill and is schema, not
+resolved profile data — like `SKILL.md`, it never moves to the resolved
+directory): quantified Traits, 3–8 scrubbed Exemplars spanning the range, the
+Anti-pattern list, and Coverage metadata (count, date range, confidence,
+gaps).
+
+**Confidence is computed, not picked.** Count the register's surviving
+samples and look up the tier against `_format.md`'s Coverage table —
+canonical there: chat ≥100/≥30 messages, email ≥40/≥15 sent messages,
+longform ≥8/≥3 pieces for high/medium respectively, below that low. (Cited
+here as numbers, not restated as a second table, so this copy and
+`_format.md`'s can't silently drift apart from each other —
+`references/relay-prompt.md` carries the one other, necessarily
+self-contained copy; see the note there.)
+
+Report the tier *with* its count together, e.g. "medium (45 messages)",
+never the tier alone. Below medium, apply `_format.md`'s two low-coverage
+gates: emit a trait only where at least 3 independent samples agree on it,
+and never emit a Strunk exemption.
 
 **Longform also gets a Strunk-exemption list.** Score the user's authentic
 long-form samples against the bundled craft rules and emit, for each rule they
@@ -213,18 +203,24 @@ lets voice-doc's craft pass enhance structure without sanding off voice. Emit
 exemptions only where the violation is *consistent* — a one-off comma splice
 is an error, not a trait.
 
-Also fill `voice-profile`'s **Global traits** section from traits that hold
-across all three registers.
+Also fill `global.md` from traits that hold across all three registers.
 
 ## Output
 
-After the exemplar approval gate, write the populated files into the installed
-`voice-profile` skill:
+After the exemplar approval gate, resolve the profile directory per
+"Resolving the profile" above, then write the populated files there.
 
-- `voice-profile/SKILL.md` → Global traits section
-- `voice-profile/references/longform.md`
-- `voice-profile/references/email.md`
-- `voice-profile/references/chat.md`
+If the directory from step 1 doesn't exist yet, create it — this is the
+"voice-harvest creates it on first run" case that section names. Write:
+
+- `global.md`
+- `longform.md`
+- `email.md`
+- `chat.md`
+
+into whichever directory the resolution order above landed on. Never write
+into `voice-profile/SKILL.md` — that file ships with the skill and is
+replaced wholesale on update; it is not a data file.
 
 Report coverage per register and name the gaps, so the user knows which
 registers are solid and which are thin. Note that voice-tune will sharpen the
