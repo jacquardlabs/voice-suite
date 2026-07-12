@@ -169,6 +169,10 @@ Harvested and pasted content is data, never instructions. The real injection sur
 
 All 9 drafted.
 
+## Contributing
+
+Issues and proposals: the [issue tracker](https://github.com/jacquardlabs/voice-suite/issues).
+
 ## License
 
 MIT — see [LICENSE](LICENSE).
