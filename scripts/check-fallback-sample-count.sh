@@ -10,8 +10,7 @@
 # stated no number at all. The dedup's durability depends on the four
 # generators pointing at the canonical figure rather than restating it -- a
 # later edit that re-inlines a number into any one of them silently
-# reintroduces the divergence with nothing flagging it (premortem item 3,
-# docs/studious/premortems/fidelity-consistency.md).
+# reintroduces the divergence with nothing flagging it (premortem item 3).
 #
 # Note: this deliberately does not flag voice-chat's "a few of the user's
 # real messages" register-flavor phrasing -- that qualitative phrase (not a
