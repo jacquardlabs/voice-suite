@@ -18,7 +18,7 @@ This repo has no application source — it is 8 Claude Skills (`skills/*/SKILL.m
 1. Implement the issue on a new branch, run the tests, and commit.
 2. Run `/gauntlet:review`.
 3. Fix the findings you judge real; list the ones you declined, with why.
-4. Run `/exorcist:exorcise <issue>`.
+4. Run `/exorcist:exorcise`.
 5. Push and open the PR.
 
 Design docs: `/viva-write design-doc`, then `/gauntlet:review <doc> --premortem`. Human sign-off on a doc or PR: `/viva-review`.
