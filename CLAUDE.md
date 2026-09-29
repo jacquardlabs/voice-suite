@@ -10,36 +10,25 @@
 This repo has no application source — it is 8 Claude Skills (`skills/*/SKILL.md` + `references/`), a plugin manifest, and release tooling. There is no language to lint (`pyproject.toml` only configures `python-semantic-release`; no Python/JS/TS source exists).
 
 - **Skills/prompts** — Markdown SKILL.md files with `name` + `description` YAML frontmatter only (no `allowed-tools` or other fields, by convention — see DESIGN.md). When editing anything under `skills/`, use the `writing-skills` meta-skill first.
-- **Linter** — none; there is no source to lint. `/gate-audit`'s code-quality and docs checks apply to prompt clarity and cross-skill consistency instead of language idiom.
+- **Linter** — none; there is no source to lint. `/gauntlet:review`'s code-quality and docs checks apply to prompt clarity and cross-skill consistency instead of language idiom.
 - **Deliberate deviations** — none recorded yet.
 
-### Quality gates
+### Issue → PR
 
-| Gate | When | Command |
-|------|------|---------|
-| Should we build? | Before any engineering | `/gate-should-we-build [idea]` |
-| Design review | After design doc, before implementation | `/gate-design-review` |
-| Audit | After implementation, before acceptance | `/gate-audit` |
-| Acceptance | After audit passes, before merge | `/gate-acceptance` |
+1. Implement the issue on a new branch, run the tests, and commit.
+2. Run `/gauntlet:review`.
+3. Fix the findings you judge real; list the ones you declined, with why.
+4. Run `/exorcist:exorcise`.
+5. Push and open the PR.
+
+Design docs: `/viva-write design-doc`, then `/gauntlet:review <doc> --premortem`. Human sign-off on a doc or PR: `/viva-review`.
 
 ### Periodic reviews
 
-| Review | Cadence | Command |
-|--------|---------|---------|
-| Codebase health | Weekly or pre-milestone | `/deep-review codebase` |
-| Interface health | Monthly or post-UI-sprint | `/deep-review interface` |
-| Architecture | Quarterly or pre-major-feature | `/deep-review architecture` |
-| Product health | Monthly | `/deep-review product` |
-| README drift | After a release or feature batch | `/deep-review readme` |
-| All reviews + summary | As needed | `/deep-review` |
+Weekly or pre-milestone: `/gauntlet:review posture` and `/exorcist:seance`.
 
 ### After each review
 
 1. Fix any **Critical** findings before the next feature
 2. File **Important** findings as tasks to address this cycle
 3. Log **Track** findings (lowest tier — revisit next cycle); they compound if ignored
-4. Update context docs if the review surfaced changes:
-   - `/deep-review product` updates PRODUCT.md
-   - `/deep-review interface` updates DESIGN.md
-   - `/deep-review architecture` updates CLAUDE.md
-   - `/deep-review readme` proposes a README.md diff

@@ -6,8 +6,7 @@
 # long-form drafting and doc-scale rewrites only. Email never gets one, at
 # any formality or length.
 #
-# Background: docs/design/fidelity-consistency.md Open question 2 /
-# docs/studious/premortems/audit-fixes-epic.md item 11. voice-rewrite's own
+# Background: docs/design/fidelity-consistency.md Open question 2. voice-rewrite's own
 # Step 5 once read "Email-scale: only if long and formal" -- borrowing the
 # longform Strunk-exemption list for long, formal email-scale rewrites,
 # after voice-email had already been fixed (this same story) to never run a
